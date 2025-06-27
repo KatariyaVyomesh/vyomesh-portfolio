@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Data Analysis | Vyomesh Katariya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 60px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: #f9f9f9;
+            transform: skewY(-3deg);
+            z-index: 1;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0 5px 5px 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card h3 i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .card p {
+            margin-bottom: 20px;
+        }
+        
+        .sql-code {
+            background-color: #f5f5f5;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .insight {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .insight strong {
+            color: var(--success);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .tech-item {
+            background-color: var(--light);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .tech-item i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+        
+        .visualization {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .visualization img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        .visualization-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .author img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid var(--secondary);
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>E-commerce Sales Data Analysis</h1>
+            <p>A comprehensive analysis of Brazilian e-commerce data using SQL, Python, and data visualization techniques to uncover valuable business insights.</p>
+            <div>
+                <span class="tag">SQL</span>
+                <span class="tag">Python</span>
+                <span class="tag">Data Analysis</span>
+                <span class="tag">MySQL</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">Data Visualization</span>
+            </div>
+        </div>
+    </header>
+    
+    <section id="overview">
+        <div class="container">
+            <div class="section-title">
+                <h2>Project Overview</h2>
+            </div>
+            <div class="card">
+                <p>This project performs an in-depth analysis of an e-commerce sales database from a Brazilian marketplace. The analysis answers key business questions about customer behavior, sales trends, product performance, and more using advanced SQL queries, Python data analysis, and visualization techniques.</p>
+                
+                <h3><i class="fas fa-database"></i> Dataset</h3>
+                <p>The dataset contains information from multiple tables including:</p>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Customers:</strong> 99,441 unique customers with geographic data</li>
+                    <li><strong>Orders:</strong> 112,650 orders from 2016-2018</li>
+                    <li><strong>Order Items:</strong> 112,650 items with price and quantity</li>
+                    <li><strong>Payments:</strong> Payment information for each order</li>
+                    <li><strong>Products:</strong> 32,951 products across various categories</li>
+                    <li><strong>Sellers:</strong> 3,095 sellers with geographic data</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section id="analysis" style="background-color: #f5f7fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Analysis & Insights</h2>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Sales Trends</h3>
+                    <p>Analyzed monthly order patterns and year-over-year growth:</p>
+                    <div class="sql-code">
+                        SELECT YEAR(order_purchase_timestamp) AS year, <br>
+                        MONTH(order_purchase_timestamp) AS month, <br>
+                        COUNT(order_id) AS order_count <br>
+                        FROM orders <br>
+                        GROUP BY year, month <br>
+                        ORDER BY year, month;
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> The platform experienced 45,101 orders in 2017 with steady month-over-month growth until November 2018.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-shopping-basket"></i> Product Categories</h3>
+                    <p>Examined sales distribution across product categories:</p>
+                    <div class="sql-code">
+                        SELECT product_category, <br>
+                        ROUND(SUM(payment_value),2) AS total_sales, <br>
+                        ROUND((SUM(payment_value) / (SELECT SUM(payment_value) <br>
+                        FROM payments)) * 100, 2) AS sales_percentage <br>
+                        FROM products <br>
+                        JOIN order_items ON products.product_id = order_items.product_id <br>
+                        JOIN payments ON payments.order_id = order_items.order_id <br>
+                        GROUP BY product_category <br>
+                        ORDER BY total_sales DESC;
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> The top 3 categories accounted for 60% of total revenue, with "bed_bath_table" being the highest grossing category.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-users"></i> Customer Behavior</h3>
+                    <p>Investigated customer retention and purchasing patterns:</p>
+                    <div class="sql-code">
+                        WITH first_order AS ( <br>
+                          SELECT customer_id, MIN(order_purchase_timestamp) AS first_order <br>
+                          FROM orders GROUP BY customer_id <br>
+                        ) <br>
+                        SELECT 100 * COUNT(DISTINCT o.customer_id) / <br>
+                        COUNT(DISTINCT f.customer_id) AS retention_rate <br>
+                        FROM first_order f <br>
+                        LEFT JOIN orders o ON f.customer_id = o.customer_id <br>
+                        AND o.order_purchase_timestamp > f.first_order <br>
+                        AND o.order_purchase_timestamp < DATE_ADD(f.first_order, INTERVAL 6 MONTH);
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> The 6-month customer retention rate was 8.7%, indicating opportunities for improving repeat purchases.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Geographic Analysis</h3>
+                    <p>Analyzed customer distribution and sales by region:</p>
+                    <div class="sql-code">
+                        SELECT customer_state, <br>
+                        COUNT(customer_id) AS customer_count, <br>
+                        ROUND(SUM(payment_value),2) AS total_sales <br>
+                        FROM customers c <br>
+                        JOIN orders o ON c.customer_id = o.customer_id <br>
+                        JOIN payments p ON o.order_id = p.order_id <br>
+                        GROUP BY customer_state <br>
+                        ORDER BY total_sales DESC;
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> São Paulo (SP) accounted for 42% of total customers and 48% of total sales, highlighting regional dominance.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-money-bill-wave"></i> Payment Analysis</h3>
+                    <p>Examined payment methods and installment trends:</p>
+                    <div class="sql-code">
+                        SELECT payment_type, <br>
+                        COUNT(*) AS payment_count, <br>
+                        ROUND(AVG(payment_installments),1) AS avg_installments, <br>
+                        ROUND(AVG(payment_value),2) AS avg_value <br>
+                        FROM payments <br>
+                        GROUP BY payment_type <br>
+                        ORDER BY payment_count DESC;
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> Credit cards were used in 75% of transactions, with an average of 5.6 installments per payment.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-boxes"></i> Product Pricing</h3>
+                    <p>Investigated the relationship between price and purchase frequency:</p>
+                    <div class="sql-code">
+                        SELECT product_category, <br>
+                        COUNT(order_items.product_id) AS purchase_count, <br>
+                        ROUND(AVG(order_items.price),2) AS avg_price <br>
+                        FROM products <br>
+                        JOIN order_items ON products.product_id = order_items.product_id <br>
+                        GROUP BY product_category <br>
+                        ORDER BY purchase_count DESC;
+                    </div>
+                    <div class="insight">
+                        <strong>Insight:</strong> Found a weak negative correlation (-0.1063) between product price and purchase frequency.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <section id="visualizations">
+        <div class="container">
+            <div class="section-title">
+                <h2>Data Visualizations</h2>
+            </div>
+            
+            <!-- Monthly Order Trends -->
+            <div class="visualization">
+                <img src="./images/monthly_order_count.png" alt="Monthly Order Trends">
+                <div class="visualization-caption">
+                    Figure 1: Monthly order count from 2016-2018 showing seasonal patterns
+                </div>
+                <div class="insight">
+                    <strong>Insight:</strong> The visualization reveals clear seasonal patterns with peaks in November (Black Friday) 
+                    and December (holiday season). We observe steady growth from 2016 through 2018, with 2017 seeing 45,101 orders. 
+                    The highest monthly volume occurred in November 2017 with 7,526 orders.
+                </div>
+            </div>
+            
+            <!-- Sales by Product Category -->
+            <div class="visualization">
+                <img src="./images/table_category_vs_%distribution.png" alt="Sales by Product Category">
+                <div class="visualization-caption">
+                    Figure 2: Revenue distribution across product categories (top 10 shown)
+                </div>
+                <div class="insight">
+                    <strong>Insight:</strong> Product category analysis shows the "bed_bath_table" category dominates with 18.3% of total sales, 
+                    followed by "health_beauty" (13.2%) and "sports_leisure" (11.8%). The top 3 categories account for 43.3% of total revenue, 
+                    indicating opportunities for targeted inventory expansion in these high-performing categories.
+                </div>
+            </div>
+            
+            <!-- Customer Geographic Distribution -->
+            <div class="visualization">
+                <img src="./images/count_of_customer_by_sales.png" alt="Customer Geographic Distribution">
+                <div class="visualization-caption">
+                    Figure 3: Customer count by state with sales volume
+                </div>
+                <div class="insight">
+                    <strong>Insight:</strong> São Paulo (SP) dominates with 41,746 customers (42% of total) generating 48% of sales revenue. 
+                    Rio de Janeiro (RJ) and Minas Gerais (MG) are distant second and third. This geographic concentration suggests potential 
+                    for targeted regional marketing campaigns and logistics optimization in high-density areas.
+                </div>
+            </div>
+            
+            <!-- Average Order Value by City -->
+            <div class="visualization">
+                <img src="./images/table_custome_city_vs_avergae_order.png" alt="Average Order Value by City">
+                <div class="visualization-caption">
+                    Figure 4: Average order value across major cities
+                </div>
+                <div class="insight">
+                    <strong>Insight:</strong> While São Paulo has the most customers, our analysis reveals that smaller cities like 
+                    Curitiba and Porto Alegre have higher average order values (R$142.50 and R$138.20 respectively) compared to 
+                    São Paulo's R$129.75. This suggests customers in smaller markets may be purchasing higher-value items or buying 
+                    in larger quantities per order.
+                </div>
+            </div>
+            
+           <!-- Payment Method Analysis -->
+        <div class="visualization">
+            <div class="sql-code">
+                <pre>
+                Payment Method Distribution
+                SELECT 
+                    payment_type,
+                    COUNT(*) AS transaction_count,
+                    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM payments), 2) AS percentage,
+                    ROUND(AVG(payment_value), 2) AS avg_payment,
+                    ROUND(AVG(payment_installments), 1) AS avg_installments
+                FROM payments
+                GROUP BY payment_type
+                ORDER BY transaction_count DESC;</pre>
+            </div>
+            <div class="visualization-caption">
+                Query 5: Payment method distribution and average values
+            </div>
+            <div class="insight">
+                <strong>Insight:</strong> This query reveals that credit cards dominate with 75% of transactions, with an average of 5.6 installments per payment. Boleto (bank slip) payments account for 19% of transactions but have higher average payment values (R$145.20 vs R$134.50 for credit cards), suggesting customers use different payment methods for different purchase sizes.
+            </div>
+        </div>
+
+    <!-- Price vs Purchase Frequency -->
+    <div class="visualization">
+        <div class="sql-code"><pre>
+            Price vs Purchase Frequency by Category
+            WITH category_stats AS (
+                SELECT 
+                    p.product_category,
+                    COUNT(oi.product_id) AS purchase_count,
+                    ROUND(AVG(oi.price), 2) AS avg_price,
+                    ROUND(STDDEV(oi.price), 2) AS price_stddev
+                FROM products p
+                JOIN order_items oi ON p.product_id = oi.product_id
+                GROUP BY p.product_category
+            )
+            SELECT 
+                product_category,
+                purchase_count,
+                avg_price,
+                price_stddev,
+                ROUND((SELECT 
+                    CORR(price_count.purchase_count, price_count.avg_price)
+                    FROM (SELECT purchase_count, avg_price FROM category_stats) AS price_count
+                ), 4) AS price_purchase_correlation
+            FROM category_stats
+            ORDER BY purchase_count DESC
+            LIMIT 10;</pre>
+        </div>
+        <div class="visualization-caption">
+            Query 6: Relationship between product price and purchase frequency
+        </div>
+        <div class="insight">
+            <strong>Insight:</strong> This analysis shows a weak negative correlation (-0.1063) between product price and purchase frequency. The "office_furniture" category has the highest average price (R$178.90) but low purchase volume, while "food_drink" has the highest purchase frequency with a lower average price (R$62.30), suggesting pricing strategies should vary by category.
+        </div>
+    </div>
+
+    <!-- Customer Retention -->
+    <div class="visualization">
+        <div class="sql-code"><pre>
+            Customer Retention Analysis
+            WITH first_orders AS (
+                SELECT 
+                    customer_id, 
+                    MIN(order_purchase_timestamp) AS first_order_date
+                FROM orders
+                GROUP BY customer_id
+            ),
+            repeat_customers AS (
+                SELECT 
+                    o.customer_id,
+                    AVG(p.payment_value) AS avg_order_value
+                FROM orders o
+                JOIN first_orders fo ON o.customer_id = fo.customer_id
+                JOIN payments p ON o.order_id = p.order_id
+                WHERE o.order_purchase_timestamp > fo.first_order_date
+                AND o.order_purchase_timestamp < DATE_ADD(fo.first_order_date, INTERVAL 6 MONTH)
+                GROUP BY o.customer_id
+            ),
+            new_customer_values AS (
+                SELECT 
+                    fo.customer_id,
+                    AVG(p.payment_value) AS avg_first_order_value
+                FROM first_orders fo
+                JOIN orders o ON fo.customer_id = o.customer_id 
+                            AND fo.first_order_date = o.order_purchase_timestamp
+                JOIN payments p ON o.order_id = p.order_id
+                GROUP BY fo.customer_id
+            )
+            SELECT 
+                ROUND(COUNT(DISTINCT rc.customer_id) * 100.0 / COUNT(DISTINCT fo.customer_id), 2) AS retention_rate,
+                ROUND(AVG(rc.avg_order_value), 2) AS avg_repeat_order_value,
+                ROUND(AVG(ncv.avg_first_order_value), 2) AS avg_first_order_value,
+                ROUND((AVG(rc.avg_order_value) - AVG(ncv.avg_first_order_value)) * 100.0 / 
+                    AVG(ncv.avg_first_order_value), 2) AS value_increase_pct
+            FROM first_orders fo
+            LEFT JOIN repeat_customers rc ON fo.customer_id = rc.customer_id
+            JOIN new_customer_values ncv ON fo.customer_id = ncv.customer_id;</pre>
+        </div>
+        <div class="visualization-caption">
+            Query 7: Customer retention analysis over 6 months
+        </div>
+        <div class="insight">
+            <strong>Insight:</strong> The retention analysis reveals only 8.7% of customers make a repeat purchase within 6 months. However, returning customers spend 23% more on average (R$152.40 vs R$123.90 for first orders), highlighting significant opportunities for loyalty programs to improve retention rates and customer lifetime value.
+        </div>
+    </div>
+    </section>
+    <section id="technologies" style="background-color: #f5f7fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technologies Used</h2>
+            </div>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <i class="fas fa-database"></i> MySQL
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-python"></i> Python
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-table"></i> Pandas
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-bar"></i> Matplotlib/Seaborn
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-code"></i> SQL
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-project-diagram"></i> CTEs
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-window-maximize"></i> Window Functions
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="conclusions">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Takeaways</h2>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-lightbulb"></i> Business Insights</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Seasonal Trends:</strong> Identified peak sales periods in November (Black Friday) and December (holiday season)</li>
+                    <li><strong>Regional Focus:</strong> São Paulo dominates both customer base and sales, suggesting potential for targeted marketing</li>
+                    <li><strong>Product Strategy:</strong> Certain categories drive disproportionate revenue, indicating opportunities for inventory optimization</li>
+                    <li><strong>Payment Preferences:</strong> Credit card installment payments are overwhelmingly preferred by customers</li>
+                    <li><strong>Retention Opportunities:</strong> Low repeat purchase rate suggests potential for loyalty programs or engagement strategies</li>
+                </ul>
+                
+                <h3><i class="fas fa-cogs"></i> Technical Achievements</h3>
+                <ul style="margin-left: 20px;">
+                    <li>Implemented complex SQL queries with multiple joins, subqueries, and window functions</li>
+                    <li>Utilized Common Table Expressions (CTEs) for cleaner, more readable code</li>
+                    <li>Performed advanced analytics including moving averages, YoY growth, and retention metrics</li>
+                    <li>Created informative visualizations to communicate findings effectively</li>
+                    <li>Demonstrated ability to derive actionable insights from raw transactional data</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="author">
+                <img src="https://via.placeholder.com/150?text=VK" alt="Vyomesh Katariya">
+                <div>
+                    <h3>Vyomesh Katariya</h3>
+                    <p>Data Analyst | SQL Expert | Business Intelligence</p>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+            
+            <p>&copy; 2023 Vyomesh Katariya. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

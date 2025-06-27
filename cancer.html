@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Detection using CNN | Medical AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .hero {
+            background: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background: #c0392b;
+        }
+        
+        .model-architecture {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .architecture-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 1rem 0;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--secondary);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .result {
+            display: none;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .result.positive {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--accent);
+            display: block;
+        }
+        
+        .result.negative {
+            background: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success);
+            display: block;
+        }
+        
+        .result-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                height: 300px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Brain Tumor Detection using CNN</h1>
+            <p class="subtitle">Advanced Deep Learning for Medical Image Classification</p>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Revolutionizing Medical Diagnosis with AI</h2>
+            <p>Our convolutional neural network model accurately classifies brain MRI images to detect tumors with high precision, assisting medical professionals in early diagnosis.</p>
+            <a href="#try-it" class="btn btn-accent" style="margin-top: 1rem;">Try It Now</a>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">About the Project</h2>
+            <div class="card">
+                <p>This project implements a deep learning-based approach to classify brain MRI images as either having a tumor (cancer) or not. The model uses a Convolutional Neural Network (CNN) trained on a dataset of medical images to provide accurate predictions, serving as an assistive tool for radiologists and medical professionals.</p>
+            </div>
+            
+            <div class="features">
+                <div class="card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="card-title">Advanced CNN Architecture</h3>
+                    <p>Our model utilizes multiple convolutional layers with ReLU activation and max pooling to effectively extract features from medical images.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="card-title">Curated Dataset</h3>
+                    <p>Trained on a carefully collected dataset with 155 tumor-positive images and 98 tumor-negative images for balanced learning.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="card-title">High Accuracy</h3>
+                    <p>The model achieves strong performance metrics through optimized architecture and hyperparameter tuning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" style="background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Model Architecture</h2>
+            
+            <div class="model-architecture">
+                <p>The model is a Convolutional Neural Network (CNN) built using TensorFlow and Keras, consisting of:</p>
+                <ul style="margin: 1rem 0 1rem 2rem;">
+                    <li>3 Convolutional layers with ReLU activation and MaxPooling</li>
+                    <li>A Flatten layer to transform image data for classification</li>
+                    <li>2 Dense layers with a dropout layer to reduce overfitting</li>
+                    <li>Binary output (cancer or no cancer) with a sigmoid activation</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre>model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
+    MaxPooling2D(2, 2),
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dropout(0.5),
+    Dense(1, activation='sigmoid')
+])</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="try-it">
+        <div class="container">
+            <h2 class="section-title">Try the Classifier</h2>
+            
+            <div class="card">
+                <p>Upload a brain MRI image to analyze it for potential tumors. Our model will process the image and provide a classification result.</p>
+                
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Upload Brain MRI Image</h3>
+                    <p>Drag & drop your image here or click to browse</p>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="result" id="result">
+                    <div class="result-icon" id="result-icon"></div>
+                    <h3 id="result-title">Result</h3>
+                    <p id="result-text"></p>
+                    <p id="confidence"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" style="background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Dataset Information</h2>
+            
+            <div class="card">
+                <h3 class="card-title">Dataset Structure</h3>
+                <p>The model was trained on images stored in separate folders for positive (tumor) and negative (no tumor) cases:</p>
+                
+                <div class="code-block">
+                    <pre>brain_tumor_data/
+├── yes/       -> Contains 155 images labeled as "cancer" in JPG format
+├── no/        -> Contains 98 images labeled as "no cancer" in JPG format</pre>
+                </div>
+                
+                <p>The dataset was split with 80% for training and 20% for validation during the model development process.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>Brain Tumor Classification using CNN</p>
+            <p>© 2023 Medical AI Project. All rights reserved.</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">This project is licensed under the MIT License</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple frontend simulation - in a real implementation, this would connect to your backend
+        document.getElementById('upload-area').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+        
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                // Simulate processing
+                document.getElementById('upload-area').innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Processing Image...</h3>';
+                
+                // Simulate API call with timeout
+                setTimeout(function() {
+                    // Random result for demo - in real app, this would come from your model
+                    const randomResult = Math.random() > 0.5 ? 'positive' : 'negative';
+                    const confidence = (Math.random() * 30 + 70).toFixed(2);
+                    
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.className = 'result ' + randomResult;
+                    
+                    if (randomResult === 'positive') {
+                        document.getElementById('result-icon').className = 'result-icon fas fa-exclamation-triangle';
+                        document.getElementById('result-title').textContent = 'Tumor Detected';
+                        document.getElementById('result-text').textContent = 'The model has identified potential tumorous tissue in the MRI image.';
+                    } else {
+                        document.getElementById('result-icon').className = 'result-icon fas fa-check-circle';
+                        document.getElementById('result-title').textContent = 'No Tumor Detected';
+                        document.getElementById('result-text').textContent = 'The model did not detect any tumorous tissue in the MRI image.';
+                    }
+                    
+                    document.getElementById('confidence').textContent = 'Confidence: ' + confidence + '%';
+                    
+                    // Reset upload area
+                    document.getElementById('upload-area').innerHTML = `
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Upload Another Image</h3>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                    `;
+                    
+                    // Reattach event listener
+                    document.getElementById('upload-area').addEventListener('click', function() {
+                        document.getElementById('file-input').click();
+                    });
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

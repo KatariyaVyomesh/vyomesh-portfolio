@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Certifications | Professional Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .certificates-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .certificate-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .certificate-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .certificate-content {
+            padding: 20px;
+        }
+
+        .certificate-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .certificate-issuer {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .certificate-issuer i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .certificate-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dfe6e9;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .social-links {
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .certificates-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 50px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .proof-link {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>My Professional Certifications</h1>
+            <p class="subtitle">Validations of my skills and continuous learning journey</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="certificates-container">
+            <!-- Certificate 1 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\Google_Data_is_eveywhere.png" alt="Google Professional Certificate - Data is Everywhere" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">Google Professional Certificate - Data is Everywhere</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-university"></i>
+                        <span>Google via Coursera</span>
+                    </div>
+                    <p>Comprehensive data analytics training covering data cleaning, analysis, visualization, and tools like spreadsheets, SQL, R programming, and Tableau.</p>
+                    <div class="certificate-actions">
+                        <a href="#google-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                        <a href="https://coursera.org/verify/XAK463TSA3G3" target="_blank" class="btn btn-secondary">Verify</a>
+                    </div>
+                    <div class="proof-link">Proof: https://coursera.org/verify/XAK463TSA3G3</div>
+                </div>
+            </div>
+
+            <!-- Certificate 2 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\AWS_Prompt.png" alt="AWS Prompt Engineering Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">AWS Prompt Engineering</h3>
+                    <div class="certificate-issuer">
+                        <i class="fab fa-aws"></i>
+                        <span>Amazon Web Services</span>
+                    </div>
+                    <p>Training in prompt engineering techniques for AWS AI services, focusing on optimizing interactions with large language models and generative AI.</p>
+                    <div class="certificate-actions">
+                        <a href="#aws-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 3 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\TCS_ETC.png" alt="TCS iON Communication Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">TCS iON Communication Skills</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-comments"></i>
+                        <span>TCS iON</span>
+                    </div>
+                    <p>Certification in effective business communication, including verbal, non-verbal, and written communication skills for professional environments.</p>
+                    <div class="certificate-actions">
+                        <a href="#tcs-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 4 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\Breach 2025.jpg" alt="Breach 2025 Hackathon Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">Gujarat's Largest Hackathon - Breach 2025 (Economania)</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-code"></i>
+                        <span>Economania 2025</span>
+                    </div>
+                    <p>Participated in Gujarat's largest hackathon, solving real-world economic problems through innovative technology solutions in a competitive environment.</p>
+                    <div class="certificate-actions">
+                        <a href="#breach-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 5 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\IBM_python.png" alt="IBM Python Fundamentals Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">IBM: Python Fundamentals for Data, AI & Development</h3>
+                    <div class="certificate-issuer">
+                        <i class="fab fa-python"></i>
+                        <span>IBM via Coursera</span>
+                    </div>
+                    <p>Comprehensive Python programming training covering fundamentals, data structures, and applications in data analysis, AI, and software development.</p>
+                    <div class="certificate-actions">
+                        <a href="#ibm-python-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                        <a href="https://coursera.org/verify/TH7C2UGY7DUZ" target="_blank" class="btn btn-secondary">Verify</a>
+                    </div>
+                    <div class="proof-link">Proof: https://coursera.org/verify/TH7C2UGY7DUZ</div>
+                </div>
+            </div>
+
+            <!-- Certificate 6 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\IBM_DA.png" alt="IBM Data Analysis Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">IBM: Exploratory Data Analysis for Data Domain</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-database"></i>
+                        <span>IBM via Coursera</span>
+                    </div>
+                    <p>Training in exploratory data analysis techniques using Python, Pandas, and visualization libraries to uncover insights from complex datasets.</p>
+                    <div class="certificate-actions">
+                        <a href="#ibm-da-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 7 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\wscube_tech_PowerBI.png" alt="Power BI Fundamentals Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">Fundamentals of Power BI</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>WsCube Tech (Upskilled Bharat)</span>
+                    </div>
+                    <p>90-minute intensive training covering Power BI fundamentals including data modeling, visualization creation, and dashboard development.</p>
+                    <div class="certificate-actions">
+                        <a href="#powerbi-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 8 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\wscube_tech_project.png" alt="Blinkit SQL Project Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">Real-Time Project: Blinkit Analysis using SQL</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>WsCube Tech</span>
+                    </div>
+                    <p>Hands-on project analyzing Blinkit's operational data using SQL queries, demonstrating practical database skills with real-world data.</p>
+                    <div class="certificate-actions">
+                        <a href="#sql-project-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate 9 -->
+            <div class="certificate-card">
+                <img src="D:\portfolio\images\Certificates\adani.jpg" alt="Adani Teachathon Participation Certificate" class="certificate-img">
+                <div class="certificate-content">
+                    <h3 class="certificate-title">Adani Institute Teachathon Participant</h3>
+                    <div class="certificate-issuer">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Adani Institute of Technology and Management</span>
+                    </div>
+                    <p>Participated in an innovative teaching competition demonstrating educational technology integration and pedagogical innovation.</p>
+                    <div class="certificate-actions">
+                        <a href="#adani-certificate-modal" class="btn btn-primary view-certificate">View Certificate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for certificate viewing -->
+    <div id="certificate-modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="year"></span> My Professional Portfolio. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/vyomesh-katariya-b9b86b289" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/KatariyaVyomesh" target="_blank"><i class="fab fa-github"></i></a>
+                <div class="contact-item">
+                    <a href="mailto:mr.vyomesh.katariya@gmail.com" class="email-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>mr.vyomesh.katariya@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Modal functionality
+        const modal = document.getElementById('certificate-modal');
+        const modalImg = document.getElementById('modal-image');
+        const closeBtn = document.getElementsByClassName('close')[0];
+        const viewButtons = document.getElementsByClassName('view-certificate');
+
+        // Add click event to all view buttons
+        for (let i = 0; i < viewButtons.length; i++) {
+            viewButtons[i].onclick = function() {
+                const certificateImg = this.closest('.certificate-card').querySelector('.certificate-img');
+                modal.style.display = "block";
+                modalImg.src = certificateImg.src;
+                modalImg.alt = certificateImg.alt;
+            }
+        }
+
+        // Close modal when clicking X
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

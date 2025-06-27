@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Intelligence Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .dashboard-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: #0078D4; /* Power BI Blue */
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .dashboard-link:hover {
+            background-color: #005a9e;
+            transform: translateY(-2px);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+            margin-top: 40px;
+            color: #2980b9;
+        }
+        
+        h3 {
+            color: #16a085;
+            margin-top: 25px;
+        }
+        
+        img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        
+        .project-details {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 15px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .toc {
+            background-color: #eaf2f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 8px;
+        }
+        
+        .toc a {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .highlight {
+            background-color: #fffde7;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        .note {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .screenshot-item {
+            text-align: center;
+        }
+        
+        .screenshot-item img {
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .toc-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 350px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.toc-header {
+    background: #2c3e50;
+    padding: 16px 20px;
+    color: white;
+}
+
+.toc-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toc-content {
+    padding: 15px 20px;
+}
+
+.toc-main-list, .toc-sublist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc-main-list > li {
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.toc-sublist {
+    margin-left: 20px;
+    margin-top: 6px;
+}
+
+.toc-sublist li {
+    margin-bottom: 6px;
+}
+
+.toc-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #34495e;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.toc-link:hover {
+    background: #f8f9fa;
+    color: #2980b9;
+    transform: translateX(2px);
+}
+
+.toc-number {
+    display: inline-block;
+    min-width: 24px;
+    color: #7f8c8d;
+    font-weight: 500;
+    margin-right: 8px;
+    font-feature-settings: "tnum";
+}
+
+.toc-parent-item > .toc-link {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+    .toc-container {
+        max-width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1><span class="emoji">🏥</span> Hospital Intelligence Dashboard</h1>
+    
+    <p>A professional, end-to-end analytics solution that turns raw hospital data into crystal-clear insights.  
+    Built with <strong>Power BI</strong> (front-end), <strong>SQL</strong> (data mart), and <strong>DAX</strong> (business logic), the dashboard lets clinicians and administrators track quality of care, operational efficiency, and financial health in real-time.</p>
+    
+    <a 
+        class="dashboard-link" 
+        href="https://app.powerbi.com/groups/me/reports/05ff6e2d-190b-4fde-8d51-6ef44d0db5de/9745bb132d3c9b3c5514?experience=power-bi" 
+        target="_blank" 
+        rel="noopener noreferrer">
+        View Hospital Intelligence Dashboard
+    </a><br>
+    OR<br>
+    <div class="description">
+    This Power BI solution is deployed on <strong>Microsoft Fabric</strong> via the Power BI App service.  
+    Click below to explore real-time hospital analytics and data insights directly through the secure Microsoft platform.
+  </div><br>
+    <a href="https://app.powerbi.com/groups/me/reports/05ff6e2d-190b-4fde-8d51-6ef44d0db5de/9745bb132d3c9b3c5514?experience=power-bi">https://app.powerbi.com/groups/me/reports/05ff6e2d-190b-4fde-8d51-6ef44d0db5de/9745bb132d3c9b3c5514?experience=power-bi</a>
+    <br>
+    
+    <div class="toc-container">
+    <div class="toc-header">
+        <h2>📖 Table of Contents</h2>
+    </div>
+    <div class="toc-content">
+        <ul class="toc-main-list">
+            <li><a href="#project-overview" class="toc-link"><span class="toc-number">1.</span> Project Overview</a></li>
+            <li><a href="#technology-stack" class="toc-link"><span class="toc-number">2.</span> Technology Stack</a></li>
+            <li><a href="#screenshots" class="toc-link"><span class="toc-number">3.</span> Screenshots</a></li>
+            <li class="toc-parent-item">
+                <a href="#page-by-page-feature-guide" class="toc-link"><span class="toc-number">4.</span> Page-by-Page Feature Guide</a>
+                <ul class="toc-sublist">
+                    <li><a href="#home-page" class="toc-link"><span class="toc-number">4.1</span> Home Page</a></li>
+                    <li><a href="#overview-page" class="toc-link"><span class="toc-number">4.2</span> Overview Page</a></li>
+                    <li><a href="#patient-page" class="toc-link"><span class="toc-number">4.3</span> Patient Page</a></li>
+                    <li><a href="#doctor-page" class="toc-link"><span class="toc-number">4.4</span> Doctor Page</a></li>
+                    <li><a href="#surgery-page" class="toc-link"><span class="toc-number">4.5</span> Surgery Page</a></li>
+                    <li><a href="#finance-page" class="toc-link"><span class="toc-number">4.6</span> Finance Page</a></li>
+                </ul>
+            </li>
+            <li><a href="#key-dax-measures" class="toc-link"><span class="toc-number">5.</span> Key DAX Measures</a></li>
+            <li><a href="#key-metrics-tracked" class="toc-link"><span class="toc-number">6.</span> Key Metrics Tracked Across Pages</a></li>
+            <li><a href="#setup-deployment" class="toc-link"><span class="toc-number">7.</span> Setup & Deployment</a></li>
+            <li><a href="#author" class="toc-link"><span class="toc-number">8.</span> Author</a></li>
+            <li><a href="#license" class="toc-link"><span class="toc-number">9.</span> License</a></li>
+        </ul>
+    </div>
+    </div>
+    
+    <h2 id="project-overview">Project Overview</h2>
+    
+    <blockquote>
+        <p><strong>Objective:</strong> Build a single, unified dashboard that consolidates patient, clinical, inventory, and financial data—enabling faster, data-driven decisions and improved patient outcomes.</p>
+    </blockquote>
+    
+    <p><strong>Highlights</strong></p>
+    <ul>
+        <li>⚡ Real-time SQL refresh for up-to-the-minute KPIs</li>
+        <li>🎛️ Intuitive slicers & bookmarks & pagination & Web URL for rapid filtering</li>
+        <li>📈 Gauge, line, clustered/stacked bar and column chart, donut chart, metrics, tables, card (new),button silcer (new),list silcer (new) & 100% stacked column visuals</li>
+        <li>🔍 Drill-through into individual patients, doctors, surgeries, and SKUs( Stock Keeping Unit->SKUs typically refer to unique inventory items, especially medicines, medical equipment, or consumables.)</li>
+    </ul>
+    
+    <h2 id="technology-stack">Technology Stack</h2>
+    
+    <table>
+        <tr>
+            <th>Layer</th>
+            <th>Tools / Frameworks</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td><strong>Data</strong></td>
+            <td>SQL Server</td>
+            <td>ETL, views, stored procs</td>
+        </tr>
+        <tr>
+            <td><strong>Modeling</strong></td>
+            <td>Power BI Data Model, DAX</td>
+            <td>Business logic & calculations</td>
+        </tr>
+        <tr>
+            <td><strong>Visualization</strong></td>
+            <td>Power BI Desktop / Service</td>
+            <td>Interactive dashboards</td>
+        </tr>
+        <tr>
+            <td><strong>Version Control</strong></td>
+            <td>Git + GitHub</td>
+            <td>Source management & CI tracking</td>
+        </tr>
+    </table>
+    
+    <h2 id="screenshots">Screenshots</h2>
+    
+    <div class="screenshot-grid">
+        <div class="screenshot-item">
+            <p>Home</p>
+            <img src="Images/Home.png" alt="Home Page">
+        </div>
+        <div class="screenshot-item">
+            <p>Overview</p>
+            <img src="Images/Overview.png" alt="Overview Page">
+        </div>
+        <div class="screenshot-item">
+            <p>Patient</p>
+            <img src="Images/Patient.png" alt="Patient Page">
+        </div>
+        <div class="screenshot-item">
+            <p>Doctor</p>
+            <img src="Images/Doctor.png" alt="Doctor Page">
+        </div>
+        <div class="screenshot-item">
+            <p>Surgery</p>
+            <img src="Images/Surgery.png" alt="Surgery Page">
+        </div>
+        <div class="screenshot-item">
+            <p>Finance</p>
+            <img src="Images/Finance.png" alt="Finance Page">
+        </div>
+    </div>
+    
+    <h2 id="page-by-page-feature-guide">Page-by-Page Feature Guide</h2>
+    
+    <h3 id="home-page">🏠 Home Page</h3>
+    
+    <table>
+        <tr>
+            <th><strong>Section</strong></th>
+            <th><strong>Description</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Hero Banner</strong></td>
+            <td>A bold welcome message: <em>"Transforming Healthcare Data into Actionable Insights"</em> with a subtitle that introduces the dashboard's role in streamlining hospital analytics.</td>
+        </tr>
+        <tr>
+            <td><strong>Real-Time Monitoring KPIs</strong></td>
+            <td>Central live metrics covering <strong>Patients</strong>, <strong>Treatments</strong>, <strong>Billing</strong>, <strong>Medicines</strong>, <strong>Beds</strong>, <strong>Staff</strong>, <strong>Appointments</strong>, <strong>Admissions</strong>, and <strong>Discharges</strong>—powered by real-time SQL updates.</td>
+        </tr>
+        <tr>
+            <td><strong>Page Navigation</strong></td>
+            <td>Transparent button-style navigation for quick access to: <strong>Overview</strong>, <strong>Patient</strong>, <strong>Doctor</strong>, <strong>Surgery</strong>, and <strong>Finance</strong> pages.</td>
+        </tr>
+        <tr>
+            <td><strong>Interactive Tiles</strong></td>
+            <td>Clickable, icon-based tiles that intuitively guide users to detailed analytical views.</td>
+        </tr>
+        <tr>
+            <td><strong>Footer (Credits)</strong></td>
+            <td>Developed by <strong>Vyomesh Katariya</strong> – <a href="https://github.com/KatariyaVyomesh" target="_blank">GitHub Profile »</a></td>
+        </tr>
+    </table>
+    
+    <h3 id="overview-page">📊 Overview Page</h3>
+    
+    <table>
+        <tr>
+            <th><strong>Feature / Control</strong></th>
+            <th><strong>Description</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Global KPI Cards</strong></td>
+            <td>Real-time counts for <strong>Doctors</strong>, <strong>Patients</strong>, <strong>Staff</strong>, and <strong>Bills</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Bed & Medicine Dual Donut (Button-Driven)</strong></td>
+            <td>A transparent button labeled <strong>"Medicine / Bed Chart"</strong> toggles a pair of donut charts:<br>• <strong>Bed Availability %</strong> (Available vs Occupied)<br>• <strong>Medicine Pricing Mix</strong> (Cost vs Selling Price).</td>
+        </tr>
+        <tr>
+            <td><strong>Real-Time Medicine Purchase Metrics</strong></td>
+            <td>Dynamic metrics showing <strong>daily</strong> and <strong>monthly</strong> quantities of medicines purchased by patients, refreshed via DirectQuery.</td>
+        </tr>
+        <tr>
+            <td><strong>Upcoming Appointments (Button Slicer "New")</strong></td>
+            <td>A button-style slicer filters to <strong>new / future appointments</strong>, instantly updating all related visuals.</td>
+        </tr>
+        <tr>
+            <td><strong>Patient Charges Type</strong></td>
+            <td><strong>Stacked column chart</strong> breaking down charges (consultation, surgery, pharmacy, etc.) by patient type or department.</td>
+        </tr>
+        <tr>
+            <td><strong>Admissions vs Discharges</strong></td>
+            <td><strong>Stacked bar chart</strong> comparing counts of <strong>Admission</strong> and <strong>Discharge</strong> patients for the selected date range.</td>
+        </tr>
+        <tr>
+            <td><strong>Discharge KPIs</strong></td>
+            <td>• <strong>% Discharged</strong> card (ratio of discharged to admitted patients).<br>• <strong>Admission Count</strong> and <strong>Discharge Count</strong> cards for absolute numbers.</td>
+        </tr>
+        <tr>
+            <td><strong>Operational Trend Line</strong></td>
+            <td><strong>Line chart</strong> showing <strong>monthly admissions</strong> across the fiscal year, highlighting peaks and troughs.</td>
+        </tr>
+        <tr>
+            <td><strong>Resource Snapshot</strong></td>
+            <td>Heat-map / table of active staff, available doctors, and resource utilization in real time.</td>
+        </tr>
+        <tr>
+            <td><strong>Interactive Filters</strong></td>
+            <td>Slicers for <strong>Month</strong>, <strong>Department</strong>, and <strong>Doctor</strong> ensure every visual reacts instantly to user selections.</td>
+        </tr>
+    </table>
+    
+    <h3 id="patient-page">🧍 Patient Page</h3>
+    
+    <p>A real-time, drill-through workspace that surfaces every key insight for an individual patient—clinical, financial, and experiential.</p>
+    
+    <table>
+        <tr>
+            <th><strong>Section / Visual</strong></th>
+            <th><strong>Purpose & Behaviour</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Edit Button (Bookmark Slicer)</strong></td>
+            <td>🔖 <strong>Top-left "Edit" button</strong> reveals a button-style slicer listing all patient names.<br>• Selecting a patient forces the page to re-filter ("force quit") and drives every dynamic title and visual on the page.</td>
+        </tr>
+        <tr>
+            <td><strong>Dynamic Page Title</strong></td>
+            <td>🏷️ Automatically changes to <strong>"Patient Overview – [Patient Name]"</strong> once a patient is selected. When no patient is selected, it falls back to <strong>"Global Patient Overview"</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Patient Profile Cards</strong></td>
+            <td>📇 Personal details: Name · Age · Gender · Contact · Rating given to doctor (feedback).</td>
+        </tr>
+        <tr>
+            <td><strong>Admission & Discharge Details</strong></td>
+            <td>📅 Cards show Admission Date, Discharge Date, and Length of Stay.</td>
+        </tr>
+        <tr>
+            <td><strong>Medicine Tracking Metrics</strong></td>
+            <td>📈 Two metric cards—<strong>Today's Quantity</strong> and <strong>Month-to-Date Quantity</strong>—refresh via DirectQuery to reflect real-time purchases.</td>
+        </tr>
+        <tr>
+            <td><strong>Medicine Quantity (Clustered Bar)</strong></td>
+            <td>💊 Displays, per medicine SKU, <strong>quantity purchased by the selected patient</strong>. Dynamic title: "Medicine Purchases by [Patient Name]".</td>
+        </tr>
+        <tr>
+            <td><strong>Bill Charges (Clustered Bars ×2)</strong></td>
+            <td>💳 Two clustered bar charts break down the patient's <strong>billable charges</strong> by category (e.g., Consultation, Surgery, Pharmacy, Misc.). Separate views for absolute ₹ amount and % share.</td>
+        </tr>
+        <tr>
+            <td><strong>Financial KPI Cards</strong></td>
+            <td>💰 <strong>Total Bill Amount</strong> and <strong>Total Medicine Quantity</strong> for the selected patient.</td>
+        </tr>
+        <tr>
+            <td><strong>Real-Time Line Chart</strong></td>
+            <td>⏱️ Daily timeline of medicine purchases (day & month granularity) for live consumption monitoring.</td>
+        </tr>
+        <tr>
+            <td><strong>Interactivity & Sync</strong></td>
+            <td>• All visuals respond instantly to the edit-button slicer.<br>• Dynamic text titles use SELECTEDVALUE() to embed the patient name.<br>• Tooltips show additional context (doctor, time, SKU).</td>
+        </tr>
+    </table>
+    
+    <div class="note">
+        <p><strong>Note:</strong> Each visual can be set to <strong>Sort → Count / Amount → Descending</strong> for quick high-to-low analysis.</p>
+    </div>
+    
+    <h3 id="doctor-page">🩺 Doctor Page</h3>
+    
+    <p>A real-time workspace that unifies schedule, performance, and financial metrics for each doctor.</p>
+    
+    <table>
+        <tr>
+            <th><strong>Section / Visual</strong></th>
+            <th><strong>Purpose & Behaviour</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Edit Button (Bookmark Slicer)</strong></td>
+            <td>🔖 <strong>Top-left "Edit" button</strong> triggers a bookmark that slides in a <strong>button-style slicer</strong> containing every doctor's <strong>photo + name</strong>.<br>— Selecting a doctor instantly re-filters the page to that profile.</td>
+        </tr>
+        <tr>
+            <td><strong>Dynamic Page Title</strong></td>
+            <td>🏷️ Automatically renders <strong>"Doctor Dashboard – [Doctor Name]"</strong> when a doctor is chosen; defaults to <strong>"Overall Doctor Summary"</strong> otherwise.</td>
+        </tr>
+        <tr>
+            <td><strong>Doctor Profile Cards</strong></td>
+            <td>🧑‍⚕️ <strong>ID</strong>, <strong>Department</strong>, <strong>Years of Experience</strong>, <strong>Qualification</strong>, <strong>Joining Date</strong>, and <strong>Avg. Patient Rating ⭐</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Appointment Slicer</strong></td>
+            <td>🎛️ Dedicated slicer lists each upcoming or historical <strong>appointment</strong> (<ins>Patient Name + Date/Time</ins>) with <strong>status tags</strong> (Scheduled / Completed) for rapid drill-in.</td>
+        </tr>
+        <tr>
+            <td><strong>Financial Gauge</strong></td>
+            <td>💸 Gauge visual powered by real-time DAX: <strong>Doctor Commission % vs. Estimated Patient Amount</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Financial Cards (Live)</strong></td>
+            <td>• <strong>Doctor Commission %</strong><br>• <strong>Doctor Fees by Bill</strong><br>• <strong>Total Bill Amount</strong> (all linked to the gauge for instant feedback).</td>
+        </tr>
+        <tr>
+            <td><strong>Contextual Cards (Patient-Scoped)</strong></td>
+            <td>When an individual patient is selected via the slicer:<br>• <strong>Doctor % Commission on Selected Patient Bill</strong><br>• <strong>Selected Patient Total Bill</strong><br>• <strong>Doctor Fees on Selected Patient Bill</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Doctor Appointment Table</strong></td>
+            <td>📋 Image + details grid showing: Patient Photo | Name | Patient ID | Status | Diagnosis | Payment Status | Doctor Fees.</td>
+        </tr>
+        <tr>
+            <td><strong>Performance KPIs</strong></td>
+            <td>Cards for <strong>Total Appointments</strong>, <strong>Patients Treated</strong>, <strong>Total Revenue Generated</strong>, <strong>Estimated Commission Earned</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Live Metrics (DirectQuery)</strong></td>
+            <td>SQL-driven cards recalculating fees, commissions, and bill totals every refresh cycle.</td>
+        </tr>
+    </table>
+    
+    <div class="note">
+        <p><strong>Note:</strong> <strong>All dynamic titles use SELECTEDVALUE() DAX to reflect the active doctor name.</strong><br>Combine the bookmark slicer with "Sync Slicers" in Power BI so the selected doctor context travels across related report pages.</p>
+    </div>
+    
+    <h3 id="surgery-page">🏥 Surgery Page</h3>
+    
+    <p>An interactive view that consolidates surgical appointments, resource utilisation, and financial details—dynamically filtered to any selected surgeon.</p>
+    
+    <table>
+        <tr>
+            <th><strong>Section / Visual</strong></th>
+            <th><strong>Purpose & Behaviour</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Edit Button (Bookmark Slicer)</strong></td>
+            <td>🔖 <strong>Top-left "Edit" button</strong> reveals a button-style slicer containing every surgeon's <strong>photo + name</strong>. Selecting a surgeon instantly re-filters <strong>all</strong> visuals and cards on the page.</td>
+        </tr>
+        <tr>
+            <td><strong>Dynamic Page & Visual Titles</strong></td>
+            <td>🏷️ All major titles use SELECTEDVALUE() DAX, e.g. <strong>"Surgery Dashboard – [Doctor Name]"</strong>. When no surgeon is chosen, titles fall back to a neutral label (e.g., "All Surgeons").</td>
+        </tr>
+        <tr>
+            <td><strong>Surgery Appointment Snapshot (Cards)</strong></td>
+            <td>📅 Real-time count of <strong>today's surgeries</strong> and next <strong>upcoming surgery time</strong> for the selected doctor.</td>
+        </tr>
+        <tr>
+            <td><strong>Doctor Appointment Table (Table 1)</strong></td>
+            <td>📋 Lists <strong>Doctor Name · Patient Name · Reason · Note · Description · Surgery Appt. Date/Time · Status</strong>. Driven by the bookmark slicer; shows only rows for the chosen surgeon.</td>
+        </tr>
+        <tr>
+            <td><strong>Patient-Level Surgery Details (Table 2)</strong></td>
+            <td>🗂️ Displays <strong>Patient Name · Patient ID · Bed ID · Room ID · Doctor ID · Reason · Note · Description · Payment Method · Surgery Fees · Discount · Final Fees · Appt. Date/Time · Status Image (Web URL)</strong>—fully scoped to the selected surgeon.</td>
+        </tr>
+        <tr>
+            <td><strong>Age Group Distribution</strong></td>
+            <td>👥 <strong>Clustered Bar Chart</strong> that groups patients into <strong>Young (20–35)</strong>, <strong>Adult (36–59)</strong>, <strong>Senior (60+)</strong> counts for the active doctor.</td>
+        </tr>
+        <tr>
+            <td><strong>Bed Utilisation by Room Type</strong></td>
+            <td>🛏️ <strong>100 % Stacked Column Chart</strong> showing <strong>Beds by Room Type</strong> split by <strong>Status (Available vs Occupied)</strong> for quick capacity checks.</td>
+        </tr>
+        <tr>
+            <td><strong>Staff Slicer (Dynamic)</strong></td>
+            <td>🎚️ A slicer for <strong>Staff Name</strong> that filters both tables and adjusts all card totals—ideal for team performance reviews.</td>
+        </tr>
+        <tr>
+            <td><strong>Performance & Financial KPI Cards</strong></td>
+            <td>💸 Cards for <strong>Total Surgeries</strong>, <strong>Total Surgical Revenue</strong>, <strong>Average Surgery Discount</strong>, and <strong>Avg. Length of Stay</strong>—all reactive to surgeon and staff selections.</td>
+        </tr>
+    </table>
+    
+    <div class="note">
+        <p><strong>Note:</strong> <strong>Every dynamic title and subtitle leverages SELECTEDVALUE() DAX</strong> to display the active doctor's name.</p>
+    </div>
+    
+    <h3 id="finance-page">💰 Finance Page</h3>
+    
+    <p>The <strong>Finance Page</strong> provides an interactive and real-time overview of the hospital's financial operations, including billing, stock, patient charges, and revenue trends.</p>
+    
+    <div class="note">
+        <p><strong>Note:</strong> All visuals in this page are fully <strong>dynamic</strong> and respond to:
+        - <strong>Month Slicer</strong> (for tracking performance month-wise)
+        - <strong>Edit Button Bookmark – Medicine</strong> (filters all data based on selected medicine)</p>
+    </div>
+    
+    <table>
+        <tr>
+            <th><strong>Section / Visual</strong></th>
+            <th><strong>Purpose & Behaviour</strong></th>
+        </tr>
+        <tr>
+            <td><strong>Edit Button (Bookmark – Medicine)</strong></td>
+            <td>📌 Opens a dynamic button slicer listing <strong>all medicine names</strong>. Once selected, it filters the entire page to show medicine-specific insights.</td>
+        </tr>
+        <tr>
+            <td><strong>Dynamic Titles</strong></td>
+            <td>🏷️ Every chart and section uses SELECTEDVALUE() in DAX to display the currently selected <strong>month</strong> or <strong>medicine</strong> in the title.</td>
+        </tr>
+        <tr>
+            <td><strong>Month Slicer</strong></td>
+            <td>📅 Allows filtering all data on the page by a selected <strong>billing month</strong>, enabling clear month-over-month comparisons.</td>
+        </tr>
+        <tr>
+            <td><strong>Real-Time Sales Tracking</strong></td>
+            <td>📈 <strong>Line Chart</strong> showing the <strong>monthly trend</strong> of medicines purchased by patients.</td>
+        </tr>
+        <tr>
+            <td><strong>Financial Summary (Cards)</strong></td>
+            <td>💳 Cards show key metrics: <strong>Total Bill Amount</strong>, <strong>Staff Salary</strong>, <strong>Bill Count</strong>, <strong>Patient Count</strong>, <strong>Doctor Count</strong>, <strong>Staff Count</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Inventory KPIs (Cards)</strong></td>
+            <td>📦 Cards summarizing stock status: <strong>Total Medicine Count</strong>, <strong>Reorder Count</strong>, and <strong>Total Stock Quantity</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Stock vs Reorder Level</strong></td>
+            <td>🧾 <strong>Stacked Column Chart</strong> compares the <strong>available stock</strong> vs. <strong>reorder level</strong> for each medicine, highlighting over- and under-stocked items.</td>
+        </tr>
+        <tr>
+            <td><strong>Charge Type Distribution</strong></td>
+            <td>📐 <strong>Stacked Column Chart</strong> categorizes <strong>patient charges</strong> (Consultation, Medicine, Surgery, etc.) by type for cost analysis.</td>
+        </tr>
+        <tr>
+            <td><strong>Admission vs. Discharge Trends</strong></td>
+            <td>📊 <strong>Stacked Bar Chart</strong> comparing <strong>monthly admission and discharge counts</strong>. Complemented with cards displaying: <strong>Total Admitted</strong>, <strong>Total Discharged</strong>, and <strong>% Discharged</strong>.</td>
+        </tr>
+        <tr>
+            <td><strong>Upcoming Appointments (Slicer - New)</strong></td>
+            <td>📅 <strong>Button slicer</strong> to filter and view <strong>upcoming appointment data</strong> for patients dynamically.</td>
+        </tr>
+        <tr>
+            <td><strong>Stock by Category</strong></td>
+            <td>📊 <strong>Stacked Bar Chart</strong> shows stock quantity per <strong>medicine category</strong>, useful for inventory planning and category-level decisions.</td>
+        </tr>
+        <tr>
+            <td><strong>Monthly Admission Trend</strong></td>
+            <td>📈 <strong>Line Chart</strong> visualizing <strong>monthly admission counts</strong>, assisting in capacity and operational planning.</td>
+        </tr>
+    </table>
+    
+    <h2 id="key-dax-measures">📊 Key DAX Measures – Hospital Power BI Dashboard</h2>
+    
+    <p>This section outlines all important DAX measures used across pages of the hospital management dashboard. These help drive KPIs, track performance, and add dynamic behavior to visuals.</p>
+    
+    <h3>🧪 Medicine Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Medicine Quantity</td>
+            <td>Total quantity sold / dispensed</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Medicine Count</td>
+            <td>Unique medicine types in stock</td>
+        </tr>
+    </table>
+    
+    <h3>👨‍⚕️ Doctor Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Doctor Count</td>
+            <td>Total active doctors</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Sum of Rating (⭐)</td>
+            <td>Average star rating by doctor</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Doctor Commission %</td>
+            <td>Commission percentage based on fees</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Estimate Doctor Commission</td>
+            <td>Forecasted commission based on bill amount</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Doctor Status</td>
+            <td>Status – Active or Inactive</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Dynamic Doctor Appointment</td>
+            <td>Sliced appointment table</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>Dynamic Doctor-Patient Appt.</td>
+            <td>Patient list filtered by selected doctor</td>
+        </tr>
+    </table>
+    
+    <h3>💰 Billing & Financial Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Total Bill Amount</td>
+            <td>Overall billing (per patient/month)</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Max Amount</td>
+            <td>Highest bill recorded</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Bill Count</td>
+            <td>Number of invoices generated</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Total Fees by Patient</td>
+            <td>Aggregated consultation/treatment fees per patient</td>
+        </tr>
+    </table>
+    
+    <h3>🛏️ Bed & Room Occupancy Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Bed Occupied Target KPI</td>
+            <td>Target = Previous Month + 5%</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Bed Occupied Selected Month</td>
+            <td>Current month's occupancy</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Bed Occupied Trend</td>
+            <td>Occupancy trend over time</td>
+        </tr>
+    </table>
+    
+    <h3>🧍 Patient Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Patient Count</td>
+            <td>Unique patients</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Total Admission</td>
+            <td>Patient admissions</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Dynamic Surgery Appointment</td>
+            <td>Appointments filtered by selected surgeon</td>
+        </tr>
+    </table>
+    
+    <h3>📈 Additional Metrics for Dynamic Pages</h3>
+    
+    <table>
+        <tr>
+            <th>#</th>
+            <th><strong>Measure Name</strong></th>
+            <th><strong>Purpose</strong></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Max Rate</td>
+            <td>Highest rating achieved</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Staff Count</td>
+            <td>Total staff available</td>
+        </tr>
+    </table>
+    
+    <h2 id="key-metrics-tracked">📌 Key Metrics Tracked Across Pages</h2>
+    
+    <p>This dashboard tracks a comprehensive set of live and historical metrics to provide real-time operational</p>
+        <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Description</th>
+          <th>Pages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🧑‍⚕️ Doctor Count</td><td>Total number of registered doctors.</td><td>Home, Overview, Finance</td></tr>
+        <tr><td>🧑 Patient Count</td><td>Total patients admitted or recorded in the hospital system.</td><td>Home, Overview, Patient, Finance</td></tr>
+        <tr><td>💉 Staff Count</td><td>Total active staff members working in the hospital.</td><td>Home, Overview, Finance</td></tr>
+        <tr><td>🧾 Bill Count</td><td>Total number of bills generated.</td><td>Home, Overview, Finance</td></tr>
+        <tr><td>💊 Medicine Count</td><td>Total distinct medicines in stock.</td><td>Overview, Finance</td></tr>
+        <tr><td>📦 Total Stock Quantity</td><td>Current available stock of all medicines combined.</td><td>Finance</td></tr>
+        <tr><td>⚠️ Reorder Count</td><td>Medicines that have reached or fallen below the reorder threshold.</td><td>Finance</td></tr>
+        <tr><td>🏥 Total Beds / Bed Availability %</td><td>Beds available vs. occupied.</td><td>Overview, Surgery</td></tr>
+        <tr><td>📆 Total Appointments</td><td>Scheduled or completed appointments.</td><td>Home, Overview, Doctor, Finance</td></tr>
+        <tr><td>🗓️ Upcoming Appointments</td><td>Appointments scheduled for the future.</td><td>Overview, Finance</td></tr>
+        <tr><td>📈 Monthly Admissions Trend</td><td>Line chart showing monthly admissions.</td><td>Overview, Finance</td></tr>
+        <tr><td>📉 Discharge Count & % Discharged</td><td>Number and % of patients discharged.</td><td>Overview, Finance</td></tr>
+        <tr><td>📈 Real-Time Medicine Purchases</td><td>Quantity of medicines purchased by patients.</td><td>Overview, Patient</td></tr>
+        <tr><td>💰 Total Bill Amount (Per Patient/Doctor)</td><td>Billing per patient or doctor.</td><td>Patient, Doctor, Finance</td></tr>
+        <tr><td>💳 Doctor Commission %</td><td>Commission earned by doctors.</td><td>Doctor</td></tr>
+        <tr><td>📊 Charges Breakdown by Type</td><td>Consultation, Surgery, etc.</td><td>Overview, Patient, Finance</td></tr>
+        <tr><td>🏨 Room Type vs Bed Status</td><td>Bed distribution by room category.</td><td>Surgery</td></tr>
+        <tr><td>👨‍👩‍👧‍👦 Patient Age Distribution</td><td>Demographics bar chart.</td><td>Surgery</td></tr>
+        <tr><td>📋 Appointment Summary Table</td><td>Detailed billing & appointment table.</td><td>Patient, Doctor, Surgery</td></tr>
+        <tr><td>⭐ Doctor Rating (Patient Feedback)</td><td>Ratings based on satisfaction.</td><td>Patient, Doctor</td></tr>
+        <tr><td>📉 Discount on Surgery Bills</td><td>Final fees after discount.</td><td>Surgery</td></tr>
+        <tr><td>📅 Staff-wise Filtering & Performance</td><td>Visuals filtered by staff member.</td><td>Surgery</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>⚙️ Setup & Deployment</h3>
+  <pre><code># 1. Clone the repository
+        git clone https://github.com/vyomeshkatariya/hospital-intelligence-dashboard.git
+        cd hospital-intelligence-dashboard
+
+        # 2. Open Power BI
+        #    - Load the .pbix file
+        #    - Set up your SQL connection (if required)
+        #    - Replace image paths if needed
+
+        # 3. Optional
+        #    - Publish to Power BI Service
+        #    - Use bookmarks/slicers for role filtering
+  </code></pre>
+</section>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Data Analysis | Data Science Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --netflix-red: #e50914;
+            --netflix-dark: #141414;
+            --netflix-light: #f5f5f1;
+            --netflix-gray: #808080;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(20, 20, 20, 0.7) 100%), 
+                        url('https://assets.nflxext.com/ffe/siteui/vlv3/9d3533b2-0e2b-40b2-95e0-ecd7979cc88b/4a1f8e6e-1c2a-4b0a-9b0d-9b0d9b0d9b0d/US-en-20240311-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 0;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-title {
+            color: var(--netflix-red);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--netflix-red);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .card-img-top {
+            width: 100%;
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Ensures images cover the space without stretching */
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-title {
+            color: var(--netflix-dark);
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .card-text {
+            color: var(--netflix-gray);
+            font-size: 0.9rem;
+        }
+        
+        .insights-card {
+            background-color: white;
+            border-left: 4px solid var(--netflix-red);
+            border-radius: 8px;
+        }
+        
+        .insights-card .card-title {
+            color: var(--netflix-dark);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        .insight-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .insight-item:last-child {
+            border-bottom: none;
+        }
+        
+        .insight-icon {
+            color: var(--netflix-red);
+            font-size: 1rem;
+            margin-right: 12px;
+            margin-top: 3px;
+        }
+        
+        .insight-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        .tech-stack {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+        }
+        
+        .tech-stack-title {
+            color: var(--netflix-dark);
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .tech-item {
+            display: inline-block;
+            text-align: center;
+            margin: 0 15px 15px;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .tech-icon {
+            font-size: 2rem;
+            color: var(--netflix-red);
+            margin-bottom: 8px;
+        }
+        
+        .tech-name {
+            color: var(--netflix-dark);
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        .btn-netflix {
+            background-color: var(--netflix-red);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .btn-netflix:hover {
+            background-color: #b20710;
+            color: white;
+        }
+        
+        .btn-outline-netflix {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .btn-outline-netflix:hover {
+            background-color: white;
+            color: var(--netflix-red);
+            border-color: white;
+        }
+        
+        .code-section {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            background-color: #222;
+            padding: 10px 15px;
+            color: #ccc;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .code-body {
+            padding: 0;
+        }
+        
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: transparent !important;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        footer {
+            background-color: var(--netflix-dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+        
+        .social-links {
+            margin-bottom: 25px;
+        }
+        
+        .social-icon {
+            color: white;
+            font-size: 1.2rem;
+            margin: 0 12px;
+        }
+        
+        .social-icon:hover {
+            color: var(--netflix-red);
+        }
+        
+        .copyright {
+            color: var(--netflix-gray);
+            font-size: 0.85rem;
+            margin-top: 25px;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-alt {
+            background-color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 5rem 0;
+            }
+            
+            .section {
+                padding: 50px 0;
+            }
+            
+            .tech-item {
+                margin: 0 8px 12px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Netflix Content Analysis</h1>
+            <p class="lead mb-5" style="max-width: 700px; margin: 0 auto;">A data-driven exploration of Netflix's content library revealing trends, patterns, and strategic insights</p>
+            <div class="mt-4">
+                <a href="#analysis" class="btn btn-netflix btn-lg px-4 me-3">View Analysis</a>
+                <a href="#insights" class="btn btn-outline-netflix btn-lg px-4">Key Insights</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-title">Project Overview</h2>
+                    <p class="mb-4" style="font-size: 1rem;">This comprehensive analysis examines Netflix's content strategy through data visualization and statistical exploration. Using a dataset of over 7,787 titles, I uncovered valuable insights about content distribution, production trends, and viewer preferences that reveal Netflix's global content strategy.</p>
+                    
+                    <div class="tech-stack text-center">
+                        <h3 class="tech-stack-title">Technology Stack</h3>
+                        <div>
+                            <div class="tech-item">
+                                <i class="fab fa-python tech-icon"></i>
+                                <p class="tech-name">Python</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-database tech-icon"></i>
+                                <p class="tech-name">Pandas</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-chart-line tech-icon"></i>
+                                <p class="tech-name">Matplotlib</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-chart-bar tech-icon"></i>
+                                <p class="tech-name">Seaborn</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-table tech-icon"></i>
+                                <p class="tech-name">NumPy</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-code tech-icon"></i>
+                                <p class="tech-name">Jupyter</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Analysis Section -->
+    <section id="analysis" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Data Visualizations</h2>
+            <p class="text-center mb-5" style="max-width: 700px; margin: 0 auto; font-size: 1rem;">Interactive visualizations that reveal the story behind Netflix's content strategy and viewer preferences.</p>
+            
+            <div class="row">
+                <!-- Row 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/content_type_proportion.png" class="card-img-top" alt="Content Type Proportion">
+                        <div class="card-body">
+                            <h5 class="card-title">Content Type Distribution</h5>
+                            <p class="card-text">Analysis shows Netflix's library consists of 69% movies and 31% TV shows, revealing their content acquisition strategy.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/content_added_by_year.png" class="card-img-top" alt="Content Added by Year">
+                        <div class="card-body">
+                            <h5 class="card-title">Content Growth Timeline</h5>
+                            <p class="card-text">Netflix's aggressive content expansion peaked in 2019, with over 2,100 titles added as they prepared for streaming wars.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/content_added_by_month.png" class="card-img-top" alt="Content Added by Month">
+                        <div class="card-body">
+                            <h5 class="card-title">Seasonal Content Additions</h5>
+                            <p class="card-text">Content additions follow a clear pattern with peaks in January and July, suggesting strategic release scheduling.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/top_5_movie_genres.png" class="card-img-top" alt="Top 5 Movie Genres">
+                        <div class="card-body">
+                            <h5 class="card-title">Movie Genre Preferences</h5>
+                            <p class="card-text">International Movies and Dramas dominate, representing 42% of Netflix's movie catalog, highlighting global appeal.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/top_5_tvshow_genres.png" class="card-img-top" alt="Top 5 TV Show Genres">
+                        <div class="card-body">
+                            <h5 class="card-title">TV Show Genre Trends</h5>
+                            <p class="card-text">International TV Shows and TV Dramas lead, accounting for 38% of series, showing Netflix's investment in global storytelling.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/top_10_Actor_Actoress.png" class="card-img-top" alt="Top 10 Actors/Actresses">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Frequent Cast Members</h5>
+                            <p class="card-text">David Attenborough leads with 18 appearances, reflecting Netflix's strong documentary and nature content.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/top_total_duraton_movie_by_country.png" class="card-img-top" alt="Total Movie Duration by Country">
+                        <div class="card-body">
+                            <h5 class="card-title">Movie Production by Country</h5>
+                            <p class="card-text">The US dominates with 165,378 minutes of content, followed by India at 68,420 minutes, showing production hubs.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/top_total_tvshow_seasons_by_country.png" class="card-img-top" alt="Total TV Show Seasons by Country">
+                        <div class="card-body">
+                            <h5 class="card-title">TV Show Production by Country</h5>
+                            <p class="card-text">The US produces the most seasons (1,591), with UK and Japan following, indicating regional content strategies.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="images/netflix_images/average_release_year_by_content_type.png" class="card-img-top" alt="Average Release Year by Content Type">
+                        <div class="card-body">
+                            <h5 class="card-title">Content Freshness Analysis</h5>
+                            <p class="card-text">TV shows average 2016 release while movies average 2013, showing Netflix's focus on newer series content.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Insights -->
+    <section id="insights" class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Strategic Insights</h2>
+            <p class="text-center mb-5" style="max-width: 700px; margin: 0 auto; font-size: 1rem;">Actionable business intelligence derived from the data analysis</p>
+            
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="card insights-card">
+                        <div class="card-body">
+                            <h3 class="card-title">Key Findings & Recommendations</h3>
+                            <div class="insights-list">
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-globe"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Global Content Strategy:</strong> Netflix's focus on International content (both movies and TV shows) demonstrates their successful globalization strategy, with non-English content driving significant engagement worldwide.
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-chart-line"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Content Acquisition Timing:</strong> The 2019 content spike correlates with Disney+ and Apple TV+ launches, suggesting strategic preparation for streaming wars. Monthly patterns indicate Q1 and Q3 are key addition periods.
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-video"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Production Focus Areas:</strong> The US remains the dominant production hub, but emerging markets like India, South Korea, and Spain show growing investment, aligning with subscriber growth in these regions.
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-user-tie"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Talent Utilization:</strong> Frequent appearances by documentary specialists like David Attenborough highlight Netflix's strength in factual content, while limited repeat actors in scripted shows suggests diverse casting.
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-calendar-alt"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Content Freshness:</strong> TV shows average 3 years newer than movies, indicating either faster turnover of series or greater investment in recent scripted content versus maintaining older film catalogs.
+                                    </div>
+                                </div>
+                                <div class="insight-item">
+                                    <div class="insight-icon"><i class="fas fa-exclamation-circle"></i></div>
+                                    <div class="insight-text">
+                                        <strong>Rating Strategy:</strong> The predominance of TV-MA (Mature) content (37% of library) suggests Netflix prioritizes adult subscribers, with relatively limited PG/G-rated content for younger audiences.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Python Code Section -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title text-center">Technical Implementation</h2>
+            <p class="text-center mb-5" style="max-width: 700px; margin: 0 auto; font-size: 1rem;">The data pipeline and analytical approach used to generate these insights</p>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <i class="fas fa-circle" style="color: #ff5f56; margin-right: 6px;"></i>
+                    <i class="fas fa-circle" style="color: #ffbd2e; margin-right: 6px;"></i>
+                    <i class="fas fa-circle" style="color: #27c93f;"></i>
+                    <span style="margin-left: 15px;">netflix_analysis.py</span>
+                </div>
+                <div class="code-body">
+                    <pre><code class="language-python">
+# NETFLIX CONTENT ANALYSIS
+# Data Science Project by [Your Name]
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+# Configuration
+plt.style.use('seaborn')
+sns.set_palette("husl")
+plt.rcParams['figure.figsize'] = (10, 6)
+OUTPUT_DIR = 'visualizations'
+
+def create_output_directory():
+    """Create directory for saving visualizations"""
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
+def load_and_clean_data(filepath):
+    """
+    Load Netflix data and perform initial cleaning
+    
+    Args:
+        filepath (str): Path to Netflix dataset CSV file
+        
+    Returns:
+        pd.DataFrame: Cleaned DataFrame
+    """
+    df = pd.read_csv(filepath)
+    
+    # Handle missing values
+    df.dropna(subset=['date_added'], inplace=True)
+    df['cast'] = df['cast'].fillna('Unknown')
+    df['country'] = df['country'].fillna('Unknown')
+    df['rating'] = df['rating'].fillna('Not Rated')
+    
+    # Convert and extract date features
+    df['date_added'] = pd.to_datetime(df['date_added'])
+    df['year_added'] = df['date_added'].dt.year
+    df['month_added'] = df['date_added'].dt.month_name()
+    
+    # Clean duration
+    df['duration'] = df['duration'].str.extract('(\d+)').astype(float)
+    
+    return df
+
+def analyze_genres(df):
+    """Analyze and visualize genre distributions"""
+    # Movie genres
+    movie_genres = df[df['type']=='Movie']['genres'].str.split(',').explode().str.strip()
+    top_movie_genres = movie_genres.value_counts().head(5)
+    
+    # TV show genres
+    tv_genres = df[df['type']=='TV Show']['genres'].str.split(',').explode().str.strip()
+    top_tv_genres = tv_genres.value_counts().head(5)
+    
+    # Visualization
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+    
+    top_movie_genres.plot(kind='bar', ax=ax1, title='Top 5 Movie Genres')
+    ax1.set_ylabel('Count')
+    ax1.tick_params(axis='x', rotation=45)
+    
+    top_tv_genres.plot(kind='bar', ax=ax2, title='Top 5 TV Show Genres')
+    ax2.set_ylabel('Count')
+    ax2.tick_params(axis='x', rotation=45)
+    
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/top_genres.png')
+    plt.close()
+    
+    return top_movie_genres, top_tv_genres
+
+def analyze_temporal_trends(df):
+    """Analyze content addition trends over time"""
+    # Yearly additions
+    yearly_content = df.groupby(['year_added', 'type']).size().unstack()
+    
+    # Monthly additions
+    monthly_order = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December']
+    monthly_additions = df['month_added'].value_counts().reindex(monthly_order)
+    
+    # Visualizations
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 12))
+    
+    yearly_content.plot(kind='bar', stacked=True, ax=ax1, title='Content Added by Year')
+    ax1.set_ylabel('Count')
+    ax1.set_xlabel('Year')
+    
+    monthly_additions.plot(kind='line', marker='o', ax=ax2, title='Content Added by Month')
+    ax2.set_ylabel('Count')
+    ax2.grid(True)
+    
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/content_addition_trends.png')
+    plt.close()
+    
+    return yearly_content, monthly_additions
+
+def analyze_actors(df):
+    """Analyze top actors/actresses"""
+    top_actors = df['cast'].str.split(', ').explode().value_counts().head(10)
+    
+    plt.figure(figsize=(10, 6))
+    top_actors.plot(kind='barh')
+    plt.title('Top 10 Actors/Actresses by Appearance')
+    plt.xlabel('Number of Appearances')
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/top_actors.png')
+    plt.close()
+    
+    return top_actors
+
+def analyze_content_by_country(df):
+    """Analyze content production by country"""
+    # Movie duration by country
+    movie_duration = df[df['type']=='Movie'].groupby('country')['duration'].sum()
+    top_movie_countries = movie_duration.sort_values(ascending=False).head(10)
+    
+    # TV show seasons by country
+    tv_seasons = df[df['type']=='TV Show'].groupby('country')['duration'].sum()
+    top_tv_countries = tv_seasons.sort_values(ascending=False).head(10)
+    
+    # Visualizations
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+    
+    top_movie_countries.plot(kind='bar', ax=ax1, title='Total Movie Duration by Country (Top 10)')
+    ax1.set_ylabel('Total Duration (minutes)')
+    ax1.tick_params(axis='x', rotation=45)
+    
+    top_tv_countries.plot(kind='bar', ax=ax2, title='Total TV Show Seasons by Country (Top 10)')
+    ax2.set_ylabel('Total Seasons')
+    ax2.tick_params(axis='x', rotation=45)
+    
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/content_by_country.png')
+    plt.close()
+    
+    return top_movie_countries, top_tv_countries
+
+def analyze_content_characteristics(df):
+    """Analyze various content characteristics"""
+    # Release year by type
+    avg_release = df.groupby('type')['release_year'].mean()
+    
+    # Rating distribution
+    rating_counts = df['rating'].value_counts()
+    
+    # Content type proportion
+    type_counts = df['type'].value_counts()
+    
+    # Duration distributions
+    movies = df[df['type']=='Movie']
+    tv_shows = df[df['type']=='TV Show']
+    
+    # Visualizations
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(16, 12))
+    
+    avg_release.plot(kind='bar', ax=ax1, title='Average Release Year by Content Type')
+    ax1.set_ylabel('Year')
+    
+    rating_counts.plot(kind='pie', autopct='%1.1f%%', ax=ax2, title='Content Rating Distribution')
+    ax2.set_ylabel('')
+    
+    type_counts.plot(kind='pie', autopct='%1.1f%%', ax=ax3, title='Content Type Proportion')
+    ax3.set_ylabel('')
+    
+    sns.histplot(movies['duration'], bins=30, kde=True, ax=ax4)
+    ax4.set_title('Movie Duration Distribution')
+    ax4.set_xlabel('Duration (minutes)')
+    
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/content_characteristics1.png')
+    plt.close()
+    
+    # TV Show seasons distribution
+    plt.figure(figsize=(10, 6))
+    sns.histplot(tv_shows['duration'], bins=15, kde=True)
+    plt.title('TV Show Seasons Distribution')
+    plt.xlabel('Number of Seasons')
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/content_characteristics2.png')
+    plt.close()
+    
+    return avg_release, rating_counts, type_counts
+
+def generate_report(insights):
+    """Generate and print key insights report"""
+    print("\n=== NETFLIX CONTENT ANALYSIS REPORT ===")
+    print("\nKey Insights:")
+    print(f"1. Most movies are {insights['top_movie_genre']} ({insights['movie_genre_count']}), "
+          f"while most TV shows are {insights['top_tv_genre']} ({insights['tv_genre_count']})")
+    print(f"2. Peak content addition was in {insights['peak_year']} with {insights['peak_year_count']} titles added")
+    print(f"3. {insights['top_actor']} appears most frequently ({insights['actor_count']} times)")
+    print(f"4. {insights['top_movie_country']} has the highest total movie duration "
+          f"({insights['movie_duration']} minutes)")
+    print(f"5. {insights['top_tv_country']} has the most TV show seasons ({insights['tv_seasons']})")
+    print(f"6. Average release year: Movies - {insights['avg_movie_year']:.0f}, "
+          f"TV Shows - {insights['avg_tv_year']:.0f}")
+    print(f"7. Most common rating is {insights['top_rating']} ({insights['rating_count']} titles)")
+    print(f"8. Content type proportion: Movies {insights['movie_percent']:.1f}%, "
+          f"TV Shows {insights['tv_percent']:.1f}%")
+
+def main():
+    """Main execution function"""
+    create_output_directory()
+    
+    # Load data
+    try:
+        df = load_and_clean_data('netflix_titles.csv')
+    except FileNotFoundError:
+        print("Error: Netflix dataset file not found.")
+        return
+    
+    # Perform analyses
+    top_movie_genres, top_tv_genres = analyze_genres(df)
+    yearly_content, monthly_additions = analyze_temporal_trends(df)
+    top_actors = analyze_actors(df)
+    top_movie_countries, top_tv_countries = analyze_content_by_country(df)
+    avg_release, rating_counts, type_counts = analyze_content_characteristics(df)
+    
+    # Compile insights
+    insights = {
+        'top_movie_genre': top_movie_genres.index[0],
+        'movie_genre_count': top_movie_genres[0],
+        'top_tv_genre': top_tv_genres.index[0],
+        'tv_genre_count': top_tv_genres[0],
+        'peak_year': yearly_content.sum(axis=1).idxmax(),
+        'peak_year_count': yearly_content.sum(axis=1).max(),
+        'top_actor': top_actors.index[0],
+        'actor_count': top_actors[0],
+        'top_movie_country': top_movie_countries.index[0],
+        'movie_duration': top_movie_countries[0],
+        'top_tv_country': top_tv_countries.index[0],
+        'tv_seasons': top_tv_countries[0],
+        'avg_movie_year': avg_release['Movie'],
+        'avg_tv_year': avg_release['TV Show'],
+        'top_rating': rating_counts.index[0],
+        'rating_count': rating_counts[0],
+        'movie_percent': type_counts['Movie']/type_counts.sum()*100,
+        'tv_percent': type_counts['TV Show']/type_counts.sum()*100
+    }
+    
+    # Generate report
+    generate_report(insights)
+    
+    print("\nAnalysis complete. Visualizations saved to 'visualizations' directory.")
+
+if __name__ == '__main__':
+    main()
+
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="https://github.com/KatariyaVyomesh/Netflix_Data_Analysis_Using_Python" class="btn btn-netflix">
+                    <i class="fab fa-github me-2"></i> View Full Project on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <div class="social-links">
+                <p>Contact: <a href="mailto:mr.vyomesh.katariya@gmail.com">mr.vyomesh.katariya@gmail.com</a></p>
+                <a href="https://github.com/KatariyaVyomesh/Netflix_Data_Analysis_Using_Python" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/vyomesh-katariya-b9b86b289/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <!-- <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fas fa-envelope"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-medium"></i></a> -->
+            </div>
+            <p class="copyright">© 2023 Data Science Portfolio. All analysis conducted using Python and open-source data tools.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

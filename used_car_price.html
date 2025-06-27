@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Price Prediction ML | Data Science Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --dark-alt: #334155;
+            --light: #f8fafc;
+            --light-alt: #f1f5f9;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 4rem 0 6rem;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+            opacity: 0.4;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            animation: fadeInDown 1s ease;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .tech-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            margin-top: -4rem;
+            z-index: 10;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--dark-alt);
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--dark-alt);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Code Highlight */
+        .code-block {
+            background: var(--dark);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: var(--shadow);
+        }
+
+        .code-keyword {
+            color: #f92672;
+        }
+
+        .code-function {
+            color: #66d9ef;
+        }
+
+        .code-string {
+            color: #e6db74;
+        }
+
+        .code-comment {
+            color: #75715e;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: var(--dark-alt);
+            opacity: 0.8;
+        }
+
+        /* Prediction Form */
+        .prediction-form {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-alt);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .prediction-result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f0fdf4;
+            border-left: 4px solid var(--secondary);
+            border-radius: 5px;
+            display: none;
+        }
+
+        .prediction-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .prediction-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 3rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .footer-link {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-link:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-content {
+                padding: 0 20px;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--primary);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Used Car Price Prediction</h1>
+            <p class="tagline">A machine learning system to accurately predict used car prices based on vehicle specifications and market trends</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <i class="fab fa-python"></i> Python
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-brain"></i> Scikit-learn
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-line"></i> Pandas
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-project-diagram"></i> Random Forest
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-sliders-h"></i> GridSearchCV
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+
+        <section class="card">
+            <h2>Project Overview</h2>
+            <p>This data science project developed a robust machine learning model to predict used car prices with <strong>92.8% accuracy</strong>. The system analyzes various vehicle attributes including year, mileage, engine specifications, and market factors to provide accurate price estimations.</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">98.66%</div>
+                    <div class="metric-label">Training Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">92.82%</div>
+                    <div class="metric-label">Testing Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">6,926</div>
+                    <div class="metric-label">Data Points</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Features Analyzed</div>
+                </div>
+            </div>
+
+            <h3>Key Features</h3>
+            <ul>
+                <li><strong>Comprehensive Data Processing</strong>: Handled missing values, outliers, and categorical encoding</li>
+                <li><strong>Model Comparison</strong>: Evaluated 8 different ML algorithms for optimal performance</li>
+                <li><strong>Hyperparameter Tuning</strong>: Optimized Random Forest with GridSearchCV</li>
+                <li><strong>Feature Engineering</strong>: Created meaningful features from raw data</li>
+                <li><strong>Production-Ready</strong>: Clean, modular code with documentation</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Data Pipeline</h2>
+            <p>The machine learning pipeline was carefully designed to ensure data quality and model performance:</p>
+            
+            <h3>Data Cleaning</h3>
+            <ul>
+                <li>Handled missing values with mean imputation for numerical features</li>
+                <li>Removed duplicate entries (reduced dataset from 8,128 to 6,926 records)</li>
+                <li>Standardized inconsistent data formats (e.g., max_power conversion)</li>
+            </ul>
+
+            <h3>Feature Engineering</h3>
+            <ul>
+                <li>Encoded categorical variables (fuel type, transmission, seller type)</li>
+                <li>Normalized numerical features using StandardScaler</li>
+                <li>Engineered new features from existing data points</li>
+            </ul>
+
+            <div class="code-block">
+                <span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd<br>
+                <span class="code-keyword">from</span> sklearn.preprocessing <span class="code-keyword">import</span> StandardScaler, LabelEncoder<br><br>
+                
+                <span class="code-comment"># Handle missing values</span><br>
+                <span class="code-keyword">for</span> i <span class="code-keyword">in</span> data.select_dtypes(include=<span class="code-string">"float64"</span>).columns:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;data[i].fillna(data[i].mean(), inplace=<span class="code-keyword">True</span>)<br><br>
+                
+                <span class="code-comment"># Encode categorical variables</span><br>
+                le = LabelEncoder()<br>
+                data[<span class="code-string">"fuel"</span>] = le.fit_transform(data[<span class="code-string">"fuel"</span>])<br>
+                data[<span class="code-string">"transmission"</span>] = le.fit_transform(data[<span class="code-string">"transmission"</span>])<br><br>
+                
+                <span class="code-comment"># Feature scaling</span><br>
+                sc = StandardScaler()<br>
+                input_scaled = sc.fit_transform(input)
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Model Development</h2>
+            <p>After extensive experimentation, the Random Forest Regressor emerged as the best-performing model:</p>
+            
+            <h3>Algorithm Comparison</h3>
+            <ul>
+                <li><strong>Random Forest</strong>: 92.82% test accuracy (selected)</li>
+                <li><strong>Decision Tree</strong>: 91.61% test accuracy</li>
+                <li><strong>Linear Regression</strong>: 62.68% test accuracy</li>
+                <li><strong>SVR</strong>: Poor performance (negative R² score)</li>
+            </ul>
+
+            <h3>Hyperparameter Optimization</h3>
+            <p>Using GridSearchCV with 5-fold cross-validation, we identified the optimal parameters:</p>
+            
+            <!-- /* <div class="code-block">
+                <span class="code-comment"># Define parameter grid</span><br>
+                param_grid = {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'n_estimators'</span>: [50, 100, 200],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'max_depth'</span>: [None, 10, 20, 30],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_split'</span>: [2, 5, 10],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_leaf'</span>: [1, 2, 4]<br>
+                }<br><br>
+                
+                <span class="code-comment"># Best parameters found</span><br>
+                best_params = {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'max_depth'</span>: 20,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_leaf'</span>: 1,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_split'</span>: 2,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'n_estimators'</span>: 200<br */ -->
+
+            <div class="code-block">
+                <span class="code-comment"># Define parameter grid</span><br>
+                param_grid = {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'n_estimators'</span>: [50, 100, 200],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'max_depth'</span>: [None, 10, 20, 30],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_split'</span>: [2, 5, 10],<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_leaf'</span>: [1, 2, 4]<br>
+                }<br><br>
+                
+                <span class="code-comment"># Best parameters found</span><br>
+                best_params = {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'max_depth'</span>: 20,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_leaf'</span>: 1,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'min_samples_split'</span>: 2,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'n_estimators'</span>: 200<br>
+                }
+            </div>
+
+            <h3>Feature Importance</h3>
+            <p>The model revealed the most influential factors in price determination:</p>
+            <ol>
+                <li>Vehicle year (manufacturing date)</li>
+                <li>Engine size (in CC)</li>
+                <li>Kilometers driven</li>
+                <li>Max power (BHP)</li>
+                <li>Fuel type</li>
+            </ol>
+        </section>
+
+        <section class="card">
+            <h2>Results & Deployment</h2>
+            
+            <h3>Performance Metrics</h3>
+            <p>The final model achieved exceptional results on both training and test sets:</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">0.988</div>
+                    <div class="metric-label">Training R² Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">0.928</div>
+                    <div class="metric-label">Testing R² Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">0.015</div>
+                    <div class="metric-label">Mean Absolute Error</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">0.023</div>
+                    <div class="metric-label">Mean Squared Error</div>
+                </div>
+            </div>
+
+            <h3>Deployment Options</h3>
+            <ul>
+                <li><strong>Web Application</strong>: Flask/Django API for real-time predictions</li>
+                <li><strong>Mobile App</strong>: Integration with Android/iOS applications</li>
+                <li><strong>Automated Reports</strong>: Batch processing for dealership inventory</li>
+            </ul>
+
+            <div class="code-block">
+                <span class="code-comment"># Example prediction</span><br>
+                sample = [[2014,145500,Diesel,Individual,Manual,First Owner,23.4,1248,74,5]]<br>
+                predicted_price = model.predict(sample)  <span class="code-comment">#Predicted Output: ₹467,972</span>
+                <span class="code-comment">#Actual Output: ₹450,000</span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Technical Specifications</h2>
+            
+            <h3>Requirements</h3>
+            <ul>
+                <li>Python 3.8+</li>
+                <li>Scikit-learn 1.0+</li>
+                <li>Pandas 1.3+</li>
+                <li>NumPy 1.21+</li>
+                <li>Matplotlib/Seaborn for visualization</li>
+            </ul>
+
+            <h3>Dataset</h3>
+            <p>The model was trained on <span class="tooltip">CarDekho dataset<span class="tooltiptext">Contains 6,926 used car listings with 12 features each</span></span> containing:</p>
+            <ul>
+                <li>6,926 cleaned records</li>
+                <li>12 predictive features</li>
+                <li>Indian market prices (2010-2020)</li>
+            </ul>
+
+            <h3>License</h3>
+            <p>This project is available under the <strong>MIT License</strong>, allowing for both academic and commercial use with attribution.</p>
+        
+        
+        
+        
+        
+            <section class="card">
+            <h2>Try the Predictor</h2>
+            <p>Enter your car details below to get an estimated price prediction:</p>
+            
+            <div class="prediction-form">
+                <form id="pricePredictor">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="year">Manufacturing Year</label>
+                            <input type="number" id="year" min="1990" max="2023" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="km_driven">Kilometers Driven</label>
+                            <input type="number" id="km_driven" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fuel">Fuel Type</label>
+                            <select id="fuel" required>
+                                <option value="">Select Fuel Type</option>
+                                <option value="0">Petrol</option>
+                                <option value="1">Diesel</option>
+                                <option value="2">CNG</option>
+                                <option value="3">LPG</option>
+                                <option value="4">Electric</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="seller_type">Seller Type</label>
+                            <select id="seller_type" required>
+                                <option value="">Select Seller Type</option>
+                                <option value="0">Individual</option>
+                                <option value="1">Dealer</option>
+                                <option value="2">Trustmark Dealer</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transmission">Transmission</label>
+                            <select id="transmission" required>
+                                <option value="">Select Transmission</option>
+                                <option value="0">Manual</option>
+                                <option value="1">Automatic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="owner">Owner Type</label>
+                            <select id="owner" required>
+                                <option value="">Select Owner Type</option>
+                                <option value="0">First Owner</option>
+                                <option value="1">Second Owner</option>
+                                <option value="2">Third Owner</option>
+                                <option value="3">Fourth & Above Owner</option>
+                                <option value="4">Test Drive Car</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mileage">Mileage (km/ltr/kg)</label>
+                            <input type="number" id="mileage" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="engine">Engine Size (CC)</label>
+                            <input type="number" id="engine" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="max_power">Max Power (BHP)</label>
+                            <input type="number" id="max_power" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="seats">Number of Seats</label>
+                            <input type="number" id="seats" min="2" max="10" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="predictBtn">
+                        <i class="fas fa-calculator"></i> Predict Price
+                    </button>
+                </form>
+                
+                <div class="prediction-result" id="predictionResult">
+                    <h3>Estimated Car Price:</h3>
+                    <div class="prediction-value" id="predictionValue">₹0</div>
+                    <p>This prediction is based on our machine learning model with 92.8% accuracy.</p>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+        
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Used Car Price Prediction ML</h3>
+            <p>A data science project demonstrating machine learning implementation</p>
+            
+            <div class="footer-links">
+                <a href="https://github.com/KatariyaVyomesh/Used-Car-Price-Prediction-ML" class="footer-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-book"></i> Documentation
+                </a>
+                <a href="about.html" class="footer-link">
+                    <i class="fas fa-envelope"></i> Contact
+                </a>
+            </div>
+            
+            <p class="copyright">© 2023 Data Science Project. All rights reserved.</p>
+        </div>
+    </footer>
+<script>
+document.getElementById('pricePredictor').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Show loading state
+    const predictBtn = document.getElementById('predictBtn');
+    predictBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+    predictBtn.disabled = true;
+    
+    // Get form values
+    const year = parseFloat(document.getElementById('year').value);
+    const km_driven = parseFloat(document.getElementById('km_driven').value);
+    const fuel = parseInt(document.getElementById('fuel').value);
+    const seller_type = parseInt(document.getElementById('seller_type').value);
+    const transmission = parseInt(document.getElementById('transmission').value);
+    const owner = parseInt(document.getElementById('owner').value);
+    const mileage = parseFloat(document.getElementById('mileage').value);
+    const engine = parseFloat(document.getElementById('engine').value);
+    const max_power = parseFloat(document.getElementById('max_power').value);
+    const seats = parseInt(document.getElementById('seats').value);
+    
+    // Create input data array
+    const inputData = [year, km_driven, fuel, seller_type, transmission, 
+                      owner, mileage, engine, max_power, seats];
+    
+    // Make prediction
+    const predictedPrice = predictWithModel(inputData);
+    
+    // Format as Indian Rupees
+    const formatter = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+    });
+    
+    // Display result
+    document.getElementById('predictionValue').textContent = formatter.format(predictedPrice);
+    document.getElementById('predictionResult').classList.add('show');
+    
+    // Reset button
+    predictBtn.innerHTML = '<i class="fas fa-calculator"></i> Predict Price';
+    predictBtn.disabled = false;
+});
+
+// // Actual model prediction function based on your RandomForest parameters
+// function predictWithModel(inputData) {
+//     // These are the actual scaling parameters from your StandardScaler
+//     // Replace these with the actual values from your Python model
+//     const scaleMeans = [0, 2013.5, 69830, 0.5, 0.5, 0.5, 1.5, 17.5, 1250, 82.5, 5.0];
+//     const scaleStds = [1, 4.5, 50000, 0.5, 0.5, 0.5, 1.5, 2.5, 500, 25.0, 1.0];
+    
+//     // Since we don't have car name in form, use average encoded value
+//     const averageNameValue = 0; // Replace with actual mean from your data
+    
+//     // Create complete input array in correct order
+//     const completeInput = [
+//         averageNameValue,    // name (encoded)
+//         inputData[0],       // year
+//         inputData[1],       // km_driven
+//         inputData[2],       // fuel
+//         inputData[3],       // seller_type
+//         inputData[4],       // transmission
+//         inputData[5],       // owner
+//         inputData[6],       // mileage
+//         inputData[7],       // engine
+//         inputData[8],       // max_power
+//         inputData[9]        // seats
+//     ];
+    
+//     // Scale the input data (z-score normalization)
+//     const scaledInput = completeInput.map((val, i) => {
+//         return (val - scaleMeans[i]) / scaleStds[i];
+//     });
+    
+//     // This is a simplified version of your RandomForest model with 200 trees
+//     // For better accuracy, you should export the actual model parameters
+//     let prediction = 0;
+    
+//     // Year impact (newer cars more expensive)
+//     prediction += (year - 2000) * 15000;
+    
+//     // Kilometers driven impact (less km = more expensive)
+//     prediction -= (km_driven / 5000) * 5000;
+    
+//     // Fuel type impact (diesel typically more expensive)
+//     prediction += (fuel === 1) ? 75000 : 50000;
+    
+//     // Seller type impact (dealers typically ask more)
+//     prediction += (seller_type === 1) ? 50000 : 0;
+    
+//     // Transmission impact (automatic more expensive)
+//     prediction += (transmission === 1) ? 100000 : 0;
+    
+//     // Owner impact (first owner more valuable)
+//     prediction -= owner * 50000;
+    
+//     // Mileage impact (better mileage = higher value)
+//     prediction += mileage * 5000;
+    
+//     // Engine size impact
+//     prediction += engine * 100;
+    
+//     // Max power impact
+//     prediction += max_power * 2000;
+    
+//     // Seats impact (5-seaters most common)
+//     prediction += (seats === 5) ? 0 : -20000;
+    
+//     // Apply base price (adjust this based on your model intercept)
+//     prediction = Math.max(100000, prediction + 300000);
+    
+//     // Add some random forest-like variation (±10%)
+//     const variation = 0.9 + Math.random() * 0.2;
+//     prediction = prediction * variation;
+    
+//     // Round to nearest 1000
+//     return Math.round(prediction / 1000) * 1000;
+// }
+</script>
+</body>
+</html>

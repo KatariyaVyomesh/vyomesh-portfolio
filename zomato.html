@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato Real-Time Analytics Suite | Vyomesh Katariya</title>
+    <style>
+        :root {
+            --primary: #cb202d;
+            --secondary: #333333;
+            --accent: #f8f8f8;
+            --text: #444444;
+            --light: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--accent);
+        }
+        
+        header {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .project-image {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            border: 1px solid #eee;
+        }
+        
+        .section {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background-color: var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        .dashboard-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: lightcoral; /* Power BI Blue */
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .dashboard-link:hover {
+            background-color: #005a9e;
+            transform: translateY(-2px);
+        }
+        .feature-card h3 {
+            margin-top: 0;
+            color: var(--secondary);
+        }
+        
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .tech-table th, .tech-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tech-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tech-table tr:nth-child(even) {
+            background-color: var(--accent);
+        }
+        
+        .insight-card {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+        
+        .gallery-item p {
+            padding: 10px;
+            background-color: var(--light);
+            margin: 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--secondary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #a81a24;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Zomato Real-Time Analytics Suite</h1>
+        <p class="tagline">"Transforming raw data into restaurant-ready revenue strategies – one click at a time."</p>
+        <img src="./images/Zomato_Overview.png" alt="Zomato Dashboard Overview" class="project-image">
+        <div>
+            <a href="#overview" class="btn">Project Overview</a>
+            <a href="#features" class="btn">Key Features</a>
+            <a href="#dashboards" class="btn">Dashboards</a>
+            <a href="#insights" class="btn">Sample Insights</a>
+        </div>
+    </header>
+    
+    <a 
+        class="dashboard-link" 
+        href="https://app.powerbi.com/groups/me/reports/c28e5061-a4ac-40e5-9d52-ad807f86e59f/86b807d1c2498ca86821?experience=power-bi" 
+        target="_blank" 
+        rel="noopener noreferrer">
+        View Zomato Sales Insights and City based Performance Dashboard
+    </a><br>
+    OR<br>
+    <div class="description">
+    This Power BI solution is deployed on <strong>Microsoft Fabric</strong> via the Power BI App service.  
+    Click below to explore real-time zomato sales insight and city performance and data insights directly through the secure Microsoft platform.
+  </div><br>
+    <a href="https://app.powerbi.com/groups/me/reports/c28e5061-a4ac-40e5-9d52-ad807f86e59f/86b807d1c2498ca86821?experience=power-bi">https://app.powerbi.com/groups/me/reports/c28e5061-a4ac-40e5-9d52-ad807f86e59f/86b807d1c2498ca86821?experience=power-bi</a>
+
+<br><br>
+
+    <section id="overview" class="section">
+        <h2>Project Overview</h2>
+        <p>The <strong>Zomato Real-Time Analytics Suite</strong> is a fully interactive, real-time Business Intelligence dashboard built using Power BI with DirectQuery mode from SQL Server. This enterprise-grade solution delivers actionable insights into Zomato's operations across 800+ Indian cities.</p>
+        
+        <p>The dashboard enables business teams to:</p>
+        <ul>
+            <li>Monitor user engagement trends in real-time</li>
+            <li>Track sales performance and growth metrics</li>
+            <li>Segment performance by food category (Veg/Non-Veg)</li>
+            <li>Drill down by city and restaurant with hierarchical navigation</li>
+            <li>Make data-driven decisions using refreshable, real-time reports</li>
+        </ul>
+        
+        <div class="insight-card">
+            <h3>Technical Highlights</h3>
+            <p>Built with live SQL integration (DirectQuery), this solution processes millions of data points to deliver sub-second response times for business users. The architecture supports real-time decision making with 20+ dynamic DAX measures powering the visual analytics.</p>
+        </div>
+    </section>
+    
+    <section id="features" class="section">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Live SQL Server Integration</h3>
+                <p>DirectQuery mode ensures data is always current without manual refreshes, with optimized queries for performance.</p>
+            </div>
+            <div class="feature-card">
+                <h3>20+ Dynamic DAX Measures</h3>
+                <p>Advanced calculations for YOY comparisons, user segmentation, sales targets, and performance tracking.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Real-Time KPIs</h3>
+                <p>Instant visibility into key metrics like active users, order volume, revenue growth, and regional performance.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Drilldown Capabilities</h3>
+                <p>Hierarchical navigation from country → city → restaurant level with consistent metric tracking.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Dynamic Visuals</h3>
+                <p>Context-aware titles, KPIs, and charts that adapt to filter selections automatically.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Target Tracking</h3>
+                <p>Predefined business targets (e.g., +18% sales growth) with visual indicators for performance against goals.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="dashboards" class="section">
+        <h2>Dashboard Walkthrough</h2>
+        
+        <h3>1. User Engagement Dashboard</h3>
+        <img src="./images/User.png" alt="User Engagement Dashboard" class="project-image">
+        <p>This dashboard provides an in-depth analysis of Zomato's user base, helping stakeholders understand how users interact with the platform.</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>User Metrics</h3>
+                <p>Track total, active, and inactive users with demographic segmentation by age and gender.</p>
+            </div>
+            <div class="feature-card">
+                <h3>YOY Analysis</h3>
+                <p>Compare user acquisition and attrition trends year-over-year with visual indicators.</p>
+            </div>
+            <div class="feature-card">
+                <h3>MAU Trends</h3>
+                <p>Monthly Active User trends with seasonal pattern analysis and cohort retention metrics.</p>
+            </div>
+        </div>
+        
+        <h3>2. Sales Performance Dashboard</h3>
+        <img src="./images/City_Sales.png" alt="Sales Performance Dashboard" class="project-image">
+        <p>Focused on revenue performance and product demand, segmented by time, region, and food category.</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Sales KPIs</h3>
+                <p>Current vs Previous Year performance with growth percentage indicators.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Category Analysis</h3>
+                <p>Veg vs Non-Veg contribution to overall sales with trend analysis.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Target Tracking</h3>
+                <p>Visual progress against predefined sales targets with variance analysis.</p>
+            </div>
+        </div>
+        
+        <h3>3. City Analytics Dashboard</h3>
+        <!-- <img src="https://via.placeholder.com/1200x600" alt="City Analytics Dashboard" class="project-image"> -->
+        <p>Geographic performance insights helping Zomato understand regional dynamics and optimize operations.</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Top/Bottom Cities</h3>
+                <p>Instant identification of high-performing and underperforming regions.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Restaurant Ratings</h3>
+                <p>Service quality analysis by city with drilldown to individual restaurants.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Regional Growth</h3>
+                <p>User acquisition trends mapped geographically with saturation indicators.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="implementation" class="section">
+        <h2>Technical Implementation</h2>
+        <table class="tech-table">
+            <tr>
+                <th>Feature</th>
+                <th>Technology Used</th>
+            </tr>
+            <tr>
+                <td>Data Source</td>
+                <td>SQL Server (DirectQuery Mode)</td>
+            </tr>
+            <tr>
+                <td>Visualization</td>
+                <td>Power BI Desktop / Service</td>
+            </tr>
+            <tr>
+                <td>Data Modeling</td>
+                <td>DAX (Data Analysis Expressions)</td>
+            </tr>
+            <tr>
+                <td>Interactivity</td>
+                <td>Slicers, Bookmarks, Buttons</td>
+            </tr>
+            <tr>
+                <td>Deployment</td>
+                <td>Power BI Web Service</td>
+            </tr>
+        </table>
+    </section>
+    
+    <section id="insights" class="section">
+        <h2>Sample Insights</h2>
+        <div class="gallery">
+            <div class="insight-card">
+                <h3>Ahmedabad Performance</h3>
+                <p>Reported ₹15.2M in revenue (2020) with an average rating of 4.3★</p>
+            </div>
+            <div class="insight-card">
+                <h3>User Growth</h3>
+                <p>Gained 2,000+ new users in metro cities through targeted campaigns</p>
+            </div>
+            <div class="insight-card">
+                <h3>Top Restaurant</h3>
+                <p>Urban Eatery topped revenue contribution charts across multiple quarters</p>
+            </div>
+            <div class="insight-card">
+                <h3>Category Analysis</h3>
+                <p>Non-Veg items made up 58% of total orders in Tier-1 cities</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="gallery" class="section">
+        <h2>Dashboard Screenshots</h2>
+        <div class="gallery">
+            
+            <div class="gallery-item">
+                <img src="./images/Index.png" alt="Index Page">
+                <p>Index Page</p>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="./images/About.png" alt="About Dashboard">
+                <p>About Dashboard</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./images/User.png" alt="User Dashboard">
+                <p>User Engagement</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./images/City_Sales.png" alt="City Dashboard">
+                <p>City Analytics</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p><strong>Vyomesh Katariya</strong> | Data Analyst | BI Developer</p>
+        <p>© 2025 | Power BI | SQL | Data Visualization</p>
+    </footer>
+</body>
+</html>
