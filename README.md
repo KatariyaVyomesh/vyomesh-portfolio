@@ -1,7 +1,6 @@
 # Vyomesh Katariya - Data Analyst Portfolio
 
-![Data Analysis Banner](https://via.placeholder.com/1200x400?text=Data+Analysis+Portfolio) <!-- Consider adding a relevant banner image -->
-
+![Data Analytics](https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=400&q=80)
 ## 📌 Professional Summary
 
 Results-driven **Data Analyst** with strong foundations in business intelligence and machine learning. Leveraging technical expertise in Python, SQL, and Power BI to transform complex datasets into actionable insights. Passionate about predictive modeling, data storytelling, and developing data-driven solutions for business challenges.
