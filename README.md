@@ -34,25 +34,34 @@ Results-driven **Data Analyst** with strong foundations in business intelligence
 - ROI Optimization
 
 ## 📂 Featured Projects
+### 1. Hospital Intelligence Dashboard
+- Designed real-time Power BI dashboard for hospital resource monitoring
+- Included metrics like patient load, bed occupancy, and emergency response
+- Enabled data-driven decisions for hospital staff and administrators
 
-### 1. Brain Tumor Detection System | [GitHub](link) | [Demo](link)
+### 2. Zomato Sales Insight Dashboard
+- Analyzed Zomato restaurant data to evaluate city-level sales performance
+- Created Power BI visuals comparing revenue, order volume, and cuisine trends
+- Highlighted top-performing cities and customer preferences for strategic insights
+
+### 3. Brain Tumor Detection System
 - Developed CNN model achieving 94% accuracy in MRI image classification
 - Implemented data augmentation techniques to handle imbalanced dataset
 - Deployed as web application using Flask
 
-### 2. Olympic Games Analytics Dashboard (1859-2024) | [View Dashboard](link)
+### 4. Olympic Games Analytics Dashboard (1859–2024)
 - Created interactive Power BI dashboard with 10+ custom visualizations
 - Performed time-series analysis to identify participation trends
 - Developed DAX measures for medal count comparisons
 
-### 3. Predictive Inventory Management System | [Case Study](link)
+### 5. Predictive Inventory Management System 
 - Built Random Forest model to predict optimal reorder quantities (RMSE: 12.3)
 - Integrated with Django backend for business user accessibility
 - Reduced simulated stockouts by 37% in validation testing
 
 ## 🏆 Professional Achievements
 
-**PDEU Gujarat Fintech Hackathon 2023** | *4st Place Winner*
+**PDEU Gujarat First Largest Fintech Hackathon 2023** | *4st Place Winner*
 - Developed vehicle tracking system with real-time analytics dashboard
 - Implemented geospatial analysis using Python and Folium
 
