@@ -387,7 +387,199 @@
             <p style="margin-top: 1rem; opacity: 0.8;">This project is licensed under the MIT License</p>
         </div>
     </footer>
-    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeUploader();
+    });
+
+    function initializeUploader() {
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        // Drag and drop support
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleImageUpload(e.dataTransfer.files[0]);
+            }
+        });
+    }
+
+    function handleImageUpload(file) {
+        // Basic file type validation
+        if (!file.type.match('image.*')) {
+            showError("Please upload an image file (JPEG, PNG, DICOM)");
+            return;
+        }
+
+        showLoading("Verifying MRI scan...");
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Simulate MRI and brain-specific checks
+                const verification = verifyBrainMRI(img, file);
+                
+                if (!verification.isValid) {
+                    showError(verification.message || "This doesn't appear to be a valid brain MRI scan.");
+                    return;
+                }
+                
+                // If verified, analyze for tumors
+                analyzeBrainScan(img);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function verifyBrainMRI(img, file) {
+        // 1. Check if image looks like MRI (in reality would use actual DICOM verification)
+        const isMRI = simulateMRICheck(img, file);
+        if (!isMRI) {
+            return {
+                isValid: false,
+                message: "This doesn't appear to be an MRI scan. Please upload a proper brain MRI image."
+            };
+        }
+
+        // 2. Check if it's a brain scan (simplified simulation)
+        const isBrainScan = simulateBrainCheck(img);
+        if (!isBrainScan) {
+            return {
+                isValid: false,
+                message: "This MRI doesn't appear to be a brain scan. Please upload a brain MRI image."
+            };
+        }
+
+        return { isValid: true };
+    }
+
+    function simulateMRICheck(img, file) {
+        // MRI characteristics simulation
+        return (
+            img.width > 200 && 
+            img.height > 200 &&
+            Math.abs(img.width - img.height) < 50 && // Roughly square
+            file.size > 50000 // MRI files are typically large
+        );
+    }
+
+    function simulateBrainCheck(img) {
+        // Very simplified "brain" detection simulation
+        // In reality you would use actual image analysis
+        const centerColor = getCenterPixelColor(img);
+        
+        // Brain MRIs typically have certain grayscale characteristics
+        return (
+            centerColor.r > 30 && 
+            centerColor.r < 220 &&
+            Math.abs(centerColor.r - centerColor.g) < 30 && // Grayscale
+            Math.abs(centerColor.g - centerColor.b) < 30
+        );
+    }
+
+    function getCenterPixelColor(img) {
+        // Simulate getting center pixel color
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, img.width/2 - 0.5, img.height/2 - 0.5, 1, 1, 0, 0, 1, 1);
+        const pixel = ctx.getImageData(0, 0, 1, 1).data;
+        return { r: pixel[0], g: pixel[1], b: pixel[2] };
+    }
+
+    function analyzeBrainScan(img) {
+        showLoading("Analyzing brain MRI for tumors...");
+        
+        setTimeout(() => {
+            // Simulate analysis - in reality this would call your ML model
+            const hasTumor = Math.random() > 0.6; // 40% chance of tumor for demo
+            const confidence = (Math.random() * 25 + 75).toFixed(1);
+            
+            displayResults(hasTumor, confidence);
+            resetUploader();
+        }, 2000);
+    }
+
+    function displayResults(hasTumor, confidence) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.className = hasTumor ? 'result positive' : 'result negative';
+        resultDiv.style.display = 'block';
+        
+        if (hasTumor) {
+            document.getElementById('result-icon').className = 'fas fa-exclamation-triangle';
+            document.getElementById('result-title').textContent = 'Brain Tumor Detected';
+            document.getElementById('result-text').textContent = 
+                'Potential tumorous tissue identified. Please consult a specialist.';
+        } else {
+            document.getElementById('result-icon').className = 'fas fa-check-circle';
+            document.getElementById('result-title').textContent = 'No Tumor Detected';
+            document.getElementById('result-text').textContent = 
+                'No signs of tumorous tissue found in this brain MRI scan.';
+        }
+        
+        document.getElementById('confidence').textContent = `Confidence: ${confidence}%`;
+    }
+
+    function showLoading(message) {
+        document.getElementById('upload-area').innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-brain fa-spin"></i>
+            </div>
+            <h3>${message}</h3>
+        `;
+    }
+
+    function showError(message) {
+        document.getElementById('upload-area').innerHTML = `
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Upload Error</h3>
+            <p>${message}</p>
+            <button id="retry-btn" class="retry-button">Try Again</button>
+            <input type="file" id="file-input" accept="image/*" style="display:none;">
+        `;
+        
+        document.getElementById('retry-btn').addEventListener('click', resetUploader);
+    }
+
+    function resetUploader() {
+        document.getElementById('upload-area').innerHTML = `
+            <div class="upload-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>Upload Brain MRI Scan</h3>
+            <p>Drag & drop DICOM or MRI image here or click to browse</p>
+            <input type="file" id="file-input" accept="image/*" style="display:none;">
+        `;
+        
+        document.getElementById('result').style.display = 'none';
+        initializeUploader();
+    }
+</script>
+<!--     
     <script>
         // Simple frontend simulation - in a real implementation, this would connect to your backend
         document.getElementById('upload-area').addEventListener('click', function() {
@@ -437,6 +629,6 @@
                 }, 2000);
             }
         });
-    </script>
+    </script> -->
 </body>
 </html>
