@@ -75,7 +75,7 @@ Results-driven **Data Analyst** with strong foundations in business intelligence
 - Microsoft Power BI Desktop (Udemy)
 
 ## 🎓 Education
-**BSc Computer Science**  
+**BE Computer Science**  
 *LJ University* | Expected Graduation: 2027
 Acadamic Over all CGPA 8.89/10
 
