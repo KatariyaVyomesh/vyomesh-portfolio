@@ -74,17 +74,10 @@ Results-driven **Data Analyst** with strong foundations in business intelligence
 - AWS Certified Cloud Practitioner
 - Microsoft Power BI Desktop (Udemy)
 
-## 📈 Professional Experience
-
-**Data Science Intern** | *LJ University Innovation Lab* | Jan 2023-Present
-- Developed ML models improving research project accuracy by 22%
-- Automated data collection processes saving 15+ hours/week
-- Created interactive dashboards for 5+ faculty research projects
-
 ## 🎓 Education
 **BSc Computer Science**  
-*LJ University* | Expected Graduation: 2024  
-GPA: 3.8/4.0 | Dean's List 2022, 2023
+*LJ University* | Expected Graduation: 2027
+Acadamic Over all CGPA 8.89/10
 
 ## 📬 Contact Information
 
