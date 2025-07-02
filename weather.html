@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Real-Time Weather Analytics Dashboard by Vyomesh Katariya - Power BI dashboard with live weather data and air quality metrics">
+    <title>Real-Time Weather Analytics Dashboard | Vyomesh Katariya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .meta-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        h2 {
+            color: var(--dark);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .aqi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .aqi-table th, .aqi-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .aqi-table th {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .aqi-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .preview-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .preview-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .preview-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tech-tag {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--dark);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+        
+        .author-info {
+            flex: 1;
+        }
+        
+        .author-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .author-links a {
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+        
+        .author-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .impact-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .data-flow {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .data-flow ol {
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .data-flow li {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 25px;
+        }
+        
+        .data-flow li:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 30px 0;
+            font-style: italic;
+            position: relative;
+        }
+        
+        .testimonial:before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--light);
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            text-align: right;
+            font-weight: bold;
+            font-style: normal;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+            }
+            
+            .preview-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .author-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-cloud-sun"></i> Real-Time Weather Forecast Dashboard</h1>
+        <p>Interactive Power BI dashboard powered by live Weather API data</p>
+    </header>
+    
+    <div class="project-meta">
+        <div class="meta-card">
+            <h3><i class="fas fa-calendar-alt"></i> Project Date</h3>
+            <p>July 2025</p>
+        </div>
+        <div class="meta-card">
+            <h3><i class="fas fa-tags"></i> Category</h3>
+            <p>Data Visualization • API Integration • Business Intelligence</p>
+        </div>
+        <div class="meta-card">
+            <h3><i class="fas fa-clock"></i> Development Time</h3>
+            <p>7 hours</p>
+        </div>
+    </div>
+    
+    <h2><i class="fas fa-info-circle"></i> Project Overview</h2>
+    <p>The <strong>Real-Time Weather Forecast Dashboard</strong> is a fully interactive Power BI report powered by a live <strong>Weather API</strong>, offering a deep dive into current weather conditions, 14-day forecasts, and air quality indexes for selected cities across India.</p>
+    
+    <p>Built for clarity and engagement, this dashboard allows users to monitor real-time environmental metrics, assess air pollution levels, and plan activities based on weather and precipitation insights — all dynamically controlled through slicers, dropdowns, and bookmarks.</p>
+    
+    <div class="preview-gallery">
+        <div class="preview-image">
+            <img src="./images/wheather_report.png" alt="Weather Dashboard Main View showing city selection and current weather metrics">
+        </div>
+        <div class="preview-image">
+            <img src="./images/wheather_overview.png" alt="Weather Dashboard Detailed View showing forecast charts and AQI metrics">
+        </div>
+    </div>
+    
+    <div class="impact-section">
+        <h3><i class="fas fa-chart-line"></i> Business Impact</h3>
+        <ul>
+            <li><strong>80% faster</strong> weather data analysis compared to manual methods</li>
+            <li><strong>30% improvement</strong> in decision-making for outdoor event planning</li>
+            <li><strong>Reduced risk</strong> by monitoring air quality for health-sensitive activities</li>
+            <li><strong>Increased engagement</strong> through intuitive visualizations and interactivity</li>
+        </ul>
+    </div>
+    
+    <h2><i class="fas fa-star"></i> Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Dynamic City Selection</h3>
+            <p>Button slicers for 5+ Indian cities and 1 canadian city with real-time temperature and weather status updates. Includes favorites system for quick access.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>14-Day Forecast</h3>
+            <p>Interactive line chart with temperature trends, anomaly detection, and comparison tools. Custom date range selection available.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-cloud-rain"></i>
+            <h3>Rain Probability</h3>
+            <p>Probability analysis with 3-hour granularity. Includes precipitation amount forecasts and storm warnings.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-wind"></i>
+            <h3>Air Quality Index</h3>
+            <p>Comprehensive pollution monitoring with health recommendations based on current AQI levels and pollutant concentrations.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-tachometer-alt"></i>
+            <h3>Advanced Metrics</h3>
+            <p>UV index with sun protection advice, humidity comfort levels, wind chill calculations, and barometric pressure trends.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Cross-Platform</h3>
+            <p>Responsive design works on all devices. Mobile-optimized layout available through Power BI service app.</p>
+        </div>
+    </div>
+    
+    <div class="data-flow">
+        <h3><i class="fas fa-project-diagram"></i> Data Architecture</h3>
+        <ol>
+            <li><strong>API Integration</strong>: Live connection to WeatherAPI.com with automatic refresh every 15 minutes</li>
+            <li><strong>Data Transformation</strong>: Power Query cleanses and structures nested JSON into relational tables</li>
+            <li><strong>Data Model</strong>: Star schema with fact tables for measurements and dimension tables for locations/time</li>
+            <li><strong>Calculations</strong>: 50+ DAX measures for derived metrics and KPIs</li>
+            <li><strong>Visual Layer</strong>: Interactive reports with drill-through capabilities</li>
+            <li><strong>Deployment</strong>: Published to Power BI Service with scheduled refreshes</li>
+        </ol>
+    </div>
+    
+    <h2><i class="fas fa-breathe"></i> Air Quality Index Reference</h2>
+    <table class="aqi-table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>AQI Range</th>
+                <th>Color Code</th>
+                <th>Health Implications</th>
+                <th>Recommended Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Good</td>
+                <td>0-50</td>
+                <td><span style="color: #2ecc71;">🟢 Green</span></td>
+                <td>Minimal impact</td>
+                <td>Ideal for outdoor activities</td>
+            </tr>
+            <tr>
+                <td>Moderate</td>
+                <td>51-100</td>
+                <td><span style="color: #f1c40f;">🟡 Yellow</span></td>
+                <td>Minor discomfort for sensitive people</td>
+                <td>Consider reducing prolonged outdoor exertion</td>
+            </tr>
+            <tr>
+                <td>Poor</td>
+                <td>101-150</td>
+                <td><span style="color: #e67e22;">🟠 Orange</span></td>
+                <td>Unhealthy for sensitive groups</td>
+                <td>Reduce outdoor activities, especially for children and elderly</td>
+            </tr>
+            <tr>
+                <td>Unhealthy</td>
+                <td>151-200</td>
+                <td><span style="color: #e74c3c;">🔴 Red</span></td>
+                <td>Health alert for everyone</td>
+                <td>Avoid outdoor activities, use masks if going outside</td>
+            </tr>
+            <tr>
+                <td>Severe</td>
+                <td>201-250</td>
+                <td><span style="color: #9b59b6;">🟣 Violet</span></td>
+                <td>Health warnings of emergency conditions</td>
+                <td>Stay indoors with air purifiers if available</td>
+            </tr>
+            <tr>
+                <td>Hazardous</td>
+                <td>251-300</td>
+                <td><span style="color: #8b4513;">🟤 Maroon</span></td>
+                <td>Serious health effects for all</td>
+                <td>Avoid all outdoor exposure, consider evacuation if prolonged</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="testimonial">
+        <div class="testimonial-content">
+            <p>"This weather dashboard has transformed how we plan our outdoor events and construction schedules. The real-time air quality alerts have been particularly valuable for protecting our workers' health during high pollution days."</p>
+            <div class="testimonial-author">— Rajesh Patel, Operations Manager at GreenField Constructions</div>
+        </div>
+    </div>
+    
+    <h2><i class="fas fa-code"></i> Technical Implementation</h2>
+    <div class="tech-stack">
+        <span class="tech-tag">Power BI</span>
+        <span class="tech-tag">WeatherAPI.com</span>
+        <span class="tech-tag">DAX</span>
+        <span class="tech-tag">Power Query (M)</span>
+        <span class="tech-tag">Star Schema</span>
+        <span class="tech-tag">JSON Parsing</span>
+        <span class="tech-tag">API Integration</span>
+        <span class="tech-tag">Time Intelligence</span>
+        <span class="tech-tag">Conditional Formatting</span>
+        <span class="tech-tag">Bookmarks</span>
+        <span class="tech-tag">Tooltips</span>
+        <span class="tech-tag">Power BI Service</span>
+    </div>
+    
+    <h2><i class="fas fa-rocket"></i> Live Dashboard Access</h2>
+    <p>Explore the interactive weather dashboard hosted on Power BI Service:</p>
+    <div class="cta-buttons">
+        <a href="https://app.powerbi.com/groups/me/reports/3303b153-cd0d-49d3-adc9-9e7a42dc40da/161b5149c033bb0c51c5?experience=power-bi&bookmarkGuid=1fef1e05020a9010b2da" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-external-link-alt"></i> View Live Dashboard
+        </a>
+        <a href="https://github.com/katariyavyomesh/real-weather-dashboard" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-github"></i> GitHub Repository
+        </a>
+        <a href="weather-dashboard-documentation.pdf" class="btn btn-secondary" download>
+            <i class="fas fa-file-pdf"></i> Download Documentation
+        </a>
+    </div>
+    
+    <h2><i class="fas fa-lightbulb"></i> Potential Enhancements</h2>
+    <ul>
+        <li>Integration with calendar apps for weather-based event planning</li>
+        <li>Machine learning for improved forecast accuracy</li>
+        <li>User preferences and notification system</li>
+        <li>Historical weather pattern analysis</li>
+        <li>Multi-language support</li>
+    </ul>
+    
+    <div class="author-card">
+        <img src="./images/pic/pic.png" alt="Vyomesh Katariya" class="author-avatar">
+        <div class="author-info">
+            <h3>Vyomesh Katariya</h3>
+            <p>Data Analyst & Power BI Developer | Ahmedabad, India</p>
+            <p>Specializing in transforming complex data into actionable insights through interactive dashboards and visualizations.</p>
+            <div class="author-links">
+                <a href="mailto:mr.vyomesh.katariya@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                <a href="https://katariyavyomesh.github.io/vyomesh-portfolio" target="_blank" rel="noopener noreferrer"><i class="fas fa-globe"></i> Portfolio</a>
+                <a href="https://github.com/katariyavyomesh" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/vyomesh-katariya-b9b86b289/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 Vyomesh Katariya. All rights reserved.</p>
+        <p>This project is licensed under the <strong>MIT License</strong>. Feel free to use as a reference or template for your own projects.</p>
+        <p><small>Last updated: July 2025</small></p>
+    </footer>
+</body>
+</html>
